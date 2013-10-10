@@ -1,4 +1,4 @@
-﻿Build started 10/10/2013 16:00:38.
+﻿Build started 10/10/2013 16:18:02.
      1>Project "C:\Users\Cory\Desktop\Armageddonwc\Armegeddon\Armegeddon.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Armegeddon.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -26,4 +26,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.86
+Time Elapsed 00:00:01.33
