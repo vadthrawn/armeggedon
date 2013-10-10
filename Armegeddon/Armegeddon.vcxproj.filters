@@ -13,10 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Shapes">
+      <UniqueIdentifier>{363708e6-d32b-43ba-969b-0500b4f7ad76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shapes.h">
+      <Filter>Source Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Circle.h">
+      <Filter>Source Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Source Files\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon.h">
+      <Filter>Source Files\Shapes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
