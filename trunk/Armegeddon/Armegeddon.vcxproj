@@ -86,6 +86,9 @@
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="Shapes.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Planet_Texture.jpg" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

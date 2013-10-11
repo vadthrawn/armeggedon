@@ -16,6 +16,9 @@
     <Filter Include="Source Files\Shapes">
       <UniqueIdentifier>{363708e6-d32b-43ba-969b-0500b4f7ad76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Textures">
+      <UniqueIdentifier>{a8c7a320-8fad-44e0-99dc-b90e6918680d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -38,5 +41,10 @@
     <ClInclude Include="Armageddon.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Planet_Texture.jpg">
+      <Filter>Source Files\Textures</Filter>
+    </None>
   </ItemGroup>
 </Project>
