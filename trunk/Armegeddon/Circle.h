@@ -6,9 +6,9 @@
 class Circle : public Shapes
 {
 public:
-	Circle(float _radius, b2Vec2 _pos, b2Vec2 _size, float _angle, float _density,
-		float _restitution, b2Vec2 _linVel, float _angVel, shapeType _type, sf::Color _color) :
-			Shapes(_pos, _size, _angle, _density, _restitution, _linVel, _angVel, _type, _color)
+	Circle(float _radius, b2Vec2 _pos, float _angle, float _density,
+		float _restitution, b2Vec2 _linVel, float _angVel, shapeType _type, sf::Color _color, float _gravity, float _gravWellRad) :
+			Shapes(_pos, _angle, _density, _restitution, _linVel, _angVel, _type, _color, _gravity, _gravWellRad)
 	{
 		radius = _radius;
 	}
@@ -38,11 +38,18 @@ public:
 		window.draw(*shape);
 	}
 
+  float GetRadius()
+  {
+    return radius;
+  }
+
 protected:
 	float radius;
-	b2Body* body;
 	b2CircleShape circleShape;
 	sf::CircleShape* shape;
+
+  //Temporary variables to simulate gravity
+  
 };
 
 #endif

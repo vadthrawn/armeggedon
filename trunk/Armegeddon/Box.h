@@ -6,11 +6,11 @@
 class Box : public Shapes
 {
 public:
-	Box(b2Vec2 _pos, b2Vec2 _size, float _angle, float _density,
-		float _restitution, b2Vec2 _linVel, float _angVel, shapeType _type, sf::Color _color) : 
-			Shapes(_pos, _size, _angle, _density, _restitution, _linVel, _angVel, _type, _color)
+	Box(b2Vec2 _size, b2Vec2 _pos, float _angle, float _density,
+		float _restitution, b2Vec2 _linVel, float _angVel, shapeType _type, sf::Color _color, float _gravity, float _gravWellRad) : 
+			Shapes(_pos, _angle, _density, _restitution, _linVel, _angVel, _type, _color, _gravity, _gravWellRad)
 	{
-		
+		  size = _size;
 	}
 
 	void Init(b2World* world)
@@ -37,10 +37,16 @@ public:
 		window.draw(*shape);
 	}
 
+  b2Body* GetBody()
+  {
+    return body;
+  }
+
+
 protected:
-	std::list<b2Vec2> vecList;
-	b2Body* body;
+  b2Vec2 size;
 	sf::RectangleShape* shape;
+  b2PolygonShape polyShape;
 };
 
 #endif
