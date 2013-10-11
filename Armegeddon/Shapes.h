@@ -6,7 +6,6 @@
 #include <SFML/Window.hpp>
 
 #include <stdio.h>
-#include <list>
 
 #define DEGTORAD 0.0174532925f
 #define RADTODEG 57.2957795f
@@ -19,10 +18,9 @@ public:
 
 	Shapes() { }
 
-	Shapes(b2Vec2 _pos, b2Vec2 _size, float _angle, float _density, float _restitution, b2Vec2 _linVel, float _angVel, shapeType _type, sf::Color _color)
+	Shapes(b2Vec2 _pos, float _angle, float _density, float _restitution, b2Vec2 _linVel, float _angVel, shapeType _type, sf::Color _color, float _gravity, float _gravWellRad)
 	{
 		pos = _pos;
-		size = _size;
 		angle = _angle;
 		density = _density;
 		restitution = _restitution;
@@ -30,6 +28,8 @@ public:
 		angVel = _angVel;
 		type = _type;
 		color = _color;
+    gravity = _gravity;
+    gravWellRad = _gravWellRad;
 	}
 
 	virtual void Init(b2World* world)
@@ -58,12 +58,48 @@ public:
 
 	virtual void Draw(sf::RenderWindow &window) {}
 
+  void Attracted_To(Shapes* rhs)
+  {
+    float distBetweenX = rhs->GetBody()->GetPosition().x - body->GetPosition().x;
+    float distBetweenY = rhs->GetBody()->GetPosition().y - body->GetPosition().y;
+    
+    float totalDistance = sqrt(pow(distBetweenX, 2) + pow(distBetweenY, 2));
+
+    if (totalDistance > rhs->GetGravWellRadius())
+      distBetweenX = distBetweenY = 0.0f;
+
+    b2Vec2 gravPercent = b2Vec2(distBetweenX / rhs->GetGravWellRadius(), distBetweenY / rhs->GetGravWellRadius());
+    b2Vec2 gravForce = b2Vec2(rhs->GetGravity() * gravPercent.x, rhs->GetGravity() * gravPercent.y);
+    
+    body->ApplyForce(gravForce, rhs->GetBody()->GetWorldCenter());
+  }
+
+  b2Body* GetBody()
+  {
+    return body;
+  }
+
+  float GetGravWellRadius()
+  {
+    return gravWellRad;
+  }
+
+  float GetGravity()
+  {
+    return gravity;
+  }
+
+  Shapes::shapeType GetType()
+  {
+    return type;
+  }
+
 protected:
-	b2Vec2 pos, size, linVel;
-	float angle, density, angVel, restitution;
+	b2Vec2 pos, linVel;
+	float angle, density, angVel, restitution, gravity, gravWellRad;
 	shapeType type;
 	b2BodyDef bodyDef;
-	b2PolygonShape polyShape;
+  b2Body* body;
 	b2FixtureDef fixtureDef;
 	sf::Color color;
 };
