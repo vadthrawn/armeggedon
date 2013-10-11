@@ -54,6 +54,9 @@ public:
 
 		fixtureDef.density = density;
 		fixtureDef.restitution = restitution;
+
+    if (type == Shapes::shapeType::stat)
+      texture.loadFromFile("Textures/Planet_Texture.jpg");
 	}
 
 	virtual void Draw(sf::RenderWindow &window) {}
@@ -102,6 +105,7 @@ protected:
   b2Body* body;
 	b2FixtureDef fixtureDef;
 	sf::Color color;
+  sf::Texture texture;
 };
 
 #endif
