@@ -1,4 +1,4 @@
-﻿Build started 10/11/2013 7:05:02 PM.
+﻿Build started 10/11/2013 10:23:00 PM.
      1>Project "C:\Users\Cory G\Desktop\Armageddon\Armegeddon\Armegeddon.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\Armegeddon.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -6,14 +6,11 @@
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I.\SFML\include /I.\ /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D SFML_STATIC /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
      1>c:\users\cory g\desktop\armageddon\armegeddon\shapes.h(58): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-     1>c:\users\cory g\desktop\armageddon\armegeddon\circle.h(37): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
+     1>c:\users\cory g\desktop\armageddon\armegeddon\circle.h(34): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
      1>c:\users\cory g\desktop\armageddon\armegeddon\armageddon.h(30): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-     1>c:\users\cory g\desktop\armageddon\armegeddon\armageddon.h(31): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-     1>c:\users\cory g\desktop\armageddon\armegeddon\armageddon.h(32): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-     1>c:\users\cory g\desktop\armageddon\armegeddon\armageddon.h(33): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-     1>c:\users\cory g\desktop\armageddon\armegeddon\armageddon.h(34): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-     1>c:\users\cory g\desktop\armageddon\armegeddon\armageddon.h(62): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-     1>c:\users\cory g\desktop\armageddon\armegeddon\armageddon.h(66): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
+     1>c:\users\cory g\desktop\armageddon\armegeddon\armageddon.h(56): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
+     1>c:\users\cory g\desktop\armageddon\armegeddon\armageddon.h(65): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
+     1>c:\users\cory g\desktop\armageddon\armegeddon\armageddon.h(69): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -32,4 +29,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.70
+Time Elapsed 00:00:02.34

@@ -28,16 +28,8 @@ public:
 	  sf::Time createTime = creationTimer.getElapsedTime();
 
     Circle* planet = new Circle(2.0f, b2Vec2(20.0f, 15.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::stat, sf::Color::White, 5.0f, 30.0f);
-    Circle* planet2 = new Circle(1.0f, b2Vec2(10.0f, 5.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::stat, sf::Color::White, 2.5f, 15.0f);
-    Box* object1 = new Box(b2Vec2(1.0f, 1.0f), b2Vec2(5.0f, 25.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Red, 0.0f, 0.0f);
-    Box* object2 = new Box(b2Vec2(1.0f, 1.0f), b2Vec2(35.0f, 25.0f), 0.0f, 1.0f, 0.5f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Blue, 0.0f, 0.0f);
-    Circle* object3 = new Circle(1.0f, b2Vec2(10.0f, 5.0f), 0.0f, 1.0f, 0.75f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, 0.0f, 0.0f);
   
     shapeList.push_front(planet);
-    shapeList.push_front(planet2);
-    shapeList.push_front(object1);
-    shapeList.push_front(object2);
-    shapeList.push_front(object3);
 
 	  for (std::list<Shapes*>::iterator iter = shapeList.begin(); iter != shapeList.end(); ++iter)
 	  {
@@ -57,6 +49,17 @@ public:
 		  world->Step((1.f/980.f), 8, 3);
 		  window.clear(sf::Color::Black);
 
+      if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+      {
+        if (createTime.asMilliseconds() + createPause.asMilliseconds() < sf::Time(creationTimer.getElapsedTime()).asMilliseconds())
+        {
+          circle = new Circle(1.0f, b2Vec2(sf::Mouse::getPosition(window).x * SCALE, (window.getSize().y - sf::Mouse::getPosition(window).y) * SCALE), 0.0f, 1.0f, 0.15f, b2Vec2(1.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, 0.0f, 0.0f);
+          circle->Init(world);
+          shapeList.push_front(circle);
+          createTime = creationTimer.getElapsedTime();
+        }
+      }
+
 		  for (std::list<Shapes*>::iterator iter = shapeList.begin(); iter != shapeList.end(); ++iter)
 		  {
         if ((*iter)->GetType() == Shapes::shapeType::stat)
@@ -67,6 +70,7 @@ public:
               (*iter2)->Attracted_To((*iter));
           }
         }
+
 			  (*iter)->Draw(window);
 		  }
 
@@ -77,4 +81,5 @@ public:
   private:
 
     b2World* world;
+    Circle* circle;
 };

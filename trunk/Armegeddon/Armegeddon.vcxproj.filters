@@ -43,7 +43,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Planet_Texture.jpg">
+    <None Include="Textures\planet.png">
       <Filter>Source Files\Textures</Filter>
     </None>
   </ItemGroup>

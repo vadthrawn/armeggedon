@@ -56,7 +56,7 @@ public:
 		fixtureDef.restitution = restitution;
 
     if (type == Shapes::shapeType::stat)
-      texture.loadFromFile("Textures/Planet_Texture.jpg");
+      texture.loadFromFile("Textures/planet.png");
 	}
 
 	virtual void Draw(sf::RenderWindow &window) {}
