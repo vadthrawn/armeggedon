@@ -18,7 +18,7 @@ public:
 		Shapes::Init(world);
 		body = world->CreateBody(&bodyDef);
 
-		polyShape.SetAsBox(size.x / 2, size.y /2);
+		polyShape.SetAsBox(size.x / 2, size.y / 2, b2Vec2(0.0f, -2.5f), 0.0f);
 
 		fixtureDef.shape = &polyShape;
 		body->CreateFixture(&fixtureDef);
@@ -32,7 +32,7 @@ public:
 	void Draw(sf::RenderWindow &window)
 	{
 		shape->setPosition(body->GetPosition().x / SCALE, window.getSize().y - (body->GetPosition().y / SCALE));
-		shape->setRotation(body->GetAngle() * RADTODEG);
+		shape->setRotation(angle);//body->GetAngle() * RADTODEG);
 
 		window.draw(*shape);
 	}
