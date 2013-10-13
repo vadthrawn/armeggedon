@@ -15,8 +15,6 @@ public:
 
 	void Init(b2World* world)
 	{
-    count = 0;
-
 		Shapes::Init(world);
 		body = world->CreateBody(&bodyDef);
 
@@ -38,7 +36,7 @@ public:
 	void Draw(sf::RenderWindow &window)
 	{
 		shape->setPosition(body->GetPosition().x / SCALE, window.getSize().y - (body->GetPosition().y / SCALE));
-		shape->setRotation(body->GetAngle() * RADTODEG);
+		shape->setRotation(angle);//body->GetAngle() * RADTODEG);
 
     shape->setTextureRect(sf::IntRect(0, 0, 133, 134));
 
@@ -54,10 +52,6 @@ protected:
 	float radius;
 	b2CircleShape circleShape;
 	sf::CircleShape* shape;
-  int count, countMax;
-
-  //Temporary variables to simulate gravity
-  
 };
 
 #endif

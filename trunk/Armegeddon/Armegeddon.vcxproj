@@ -83,6 +83,7 @@
     <ClInclude Include="Armageddon.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="Shapes.h" />
   </ItemGroup>

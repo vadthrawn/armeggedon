@@ -28,8 +28,8 @@ public:
 		angVel = _angVel;
 		type = _type;
 		color = _color;
-    gravity = _gravity;
-    gravWellRad = _gravWellRad;
+		gravity = _gravity;
+		gravWellRad = _gravWellRad;
 	}
 
 	virtual void Init(b2World* world)
@@ -48,7 +48,7 @@ public:
 		}
 
 		bodyDef.position.Set(pos.x, pos.y);
-		bodyDef.angle = angle * DEGTORAD;
+		bodyDef.angle = -angle * DEGTORAD;
 		bodyDef.angularVelocity = angVel * DEGTORAD;
 		bodyDef.linearVelocity = linVel;
 
@@ -82,17 +82,22 @@ public:
     return body;
   }
 
-  float GetGravWellRadius()
+  float& GetGravWellRadius()
   {
     return gravWellRad;
   }
 
-  float GetGravity()
+  float& GetGravity()
   {
     return gravity;
   }
 
-  Shapes::shapeType GetType()
+  b2Vec2& GetPos()
+  {
+	  return pos;
+  }
+
+  Shapes::shapeType& GetType()
   {
     return type;
   }
@@ -102,10 +107,10 @@ protected:
 	float angle, density, angVel, restitution, gravity, gravWellRad;
 	shapeType type;
 	b2BodyDef bodyDef;
-  b2Body* body;
+	b2Body* body;
 	b2FixtureDef fixtureDef;
 	sf::Color color;
-  sf::Texture texture;
+	sf::Texture texture;
 };
 
 #endif
