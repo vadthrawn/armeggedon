@@ -29,19 +29,18 @@ public:
 		shape->setFillColor(color);
 	}
 
-	void Draw(sf::RenderWindow &window)
+	void Draw(sf::RenderWindow* window)
 	{
-		shape->setPosition(body->GetPosition().x / SCALE, window.getSize().y - (body->GetPosition().y / SCALE));
-		shape->setRotation(angle);//body->GetAngle() * RADTODEG);
+		shape->setPosition(body->GetPosition().x / SCALE, window->getSize().y - (body->GetPosition().y / SCALE));
+		shape->setRotation(angle);
 
-		window.draw(*shape);
+		window->draw(*shape);
 	}
 
   b2Body* GetBody()
   {
     return body;
   }
-
 
 protected:
   b2Vec2 size;

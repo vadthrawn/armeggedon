@@ -49,5 +49,8 @@
     <None Include="Textures\planet.png">
       <Filter>Source Files\Textures</Filter>
     </None>
+    <None Include="Textures\gradius1.png">
+      <Filter>Source Files\Textures</Filter>
+    </None>
   </ItemGroup>
 </Project>

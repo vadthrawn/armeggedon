@@ -33,19 +33,23 @@ public:
 
     for (int i = 0; i < vertSize; ++i)
       shape->setPoint(i, sf::Vector2f(vertices[i].x / SCALE, -vertices[i].y / SCALE));
+
+    if (type == Shapes::shapeType::kin)
+      shape->setTexture(&texture);
 	}
 
-	void Draw(sf::RenderWindow &window)
+	void Draw(sf::RenderWindow* window)
 	{
-		shape->setPosition(body->GetPosition().x / SCALE, window.getSize().y - (body->GetPosition().y / SCALE));
-		shape->setRotation(angle);//body->GetAngle() * RADTODEG);
+		shape->setPosition(body->GetPosition().x / SCALE, window->getSize().y - (body->GetPosition().y / SCALE));
+		shape->setRotation(angle);
 
-		window.draw(*shape);
+     shape->setTextureRect(sf::IntRect(324, 63, 17, 18));
+
+		window->draw(*shape);
 	}
 
 protected:
   int vertSize;
-  b2Vec2 size;
   b2Vec2* vertices;
   b2PolygonShape polyShape;
 	sf::ConvexShape* shape;

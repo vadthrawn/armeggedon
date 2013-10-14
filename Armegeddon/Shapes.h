@@ -57,9 +57,12 @@ public:
 
     if (type == Shapes::shapeType::stat)
       texture.loadFromFile("Textures/planet.png");
+
+    if (type == Shapes::shapeType::kin)
+      texture.loadFromFile("Textures/gradius1.png");
 	}
 
-	virtual void Draw(sf::RenderWindow &window) {}
+	virtual void Draw(sf::RenderWindow* window){}
 
   void Attracted_To(Shapes* rhs)
   {
@@ -95,6 +98,23 @@ public:
   b2Vec2& GetPos()
   {
 	  return pos;
+  }
+
+  void SetAngle(float _angle)
+  {
+    angle += _angle;
+
+    if (angle > 359.95f)
+      angle = 0.00f;
+    else if (angle < 0.00f)
+      angle = 359.95f;
+
+      body->SetTransform(body->GetPosition(), -angle * DEGTORAD);
+  }
+
+  float GetAngle()
+  {
+    return angle;
   }
 
   Shapes::shapeType& GetType()
