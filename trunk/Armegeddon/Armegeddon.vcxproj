@@ -88,6 +88,7 @@
     <ClInclude Include="Shapes.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Textures\gradius1.png" />
     <None Include="Textures\planet.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

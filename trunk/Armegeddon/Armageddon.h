@@ -13,6 +13,7 @@
 #include <Player.h>
 
 #include <list>
+#include <sstream>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -23,50 +24,38 @@ public:
 
 	Armageddon()
 	{
-		sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Armageddon", sf::Style::Default); 
+		window = new sf::RenderWindow(sf::VideoMode(800, 600, 32), "Armageddon", sf::Style::Default); 
 		world = new b2World(b2Vec2(0.0f, 0.0f));
 
 		Player::Instance();
 
-		std::list<Shapes *> shapeList;
-		sf::Clock creationTimer;
-		sf::Time createPause = sf::milliseconds(250);
-		sf::Time createTime = creationTimer.getElapsedTime();
+		createPause = sf::milliseconds(250);
+		createTime = creationTimer.getElapsedTime();
 
 		float planetRad = 2.0f;
-		Circle* planet = new Circle(planetRad, b2Vec2(20.0f, 15.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::stat, sf::Color::White, 5.0f, 30.0f);
+		planet = new Circle(planetRad, b2Vec2(20.0f, 15.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::stat, sf::Color::White, 5.0f, 30.0f);
 		planet->Init(world);
 
-		Player::Instance()->Init(b2Vec2(1.0f, 1.0f), planet->GetRadius(), planet->GetPos(), world);  
+		Player::Instance()->Init(b2Vec2(1.5f, 1.5f), planet->GetRadius(), planet->GetPos(), world);  
 
 		shapeList.push_front(planet);
 		shapeList.push_front(Player::Instance()->GetPlayerBox());
 
-		while (window.isOpen())
+		while (window->isOpen())
 		{
 			sf::Event event;
 
-			while (window.pollEvent(event))
+			while (window->pollEvent(event))
 			{
 				if (event.type == sf::Event::Closed)
-					window.close();
+					window->close();
 			}
 
 			world->Step((1.f/980.f), 8, 3);
-			window.clear(sf::Color::Black);
+			window->clear(sf::Color::Black);
 
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-			{
-				if (createTime.asMilliseconds() + createPause.asMilliseconds() < sf::Time(creationTimer.getElapsedTime()).asMilliseconds())
-				{
-					float radius = 1.0f;	
-
-					circle = new Circle(radius, b2Vec2(sf::Mouse::getPosition(window).x * SCALE, (window.getSize().y - sf::Mouse::getPosition(window).y) * SCALE), 0.0f, 1.0f, 0.15f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, 0.0f, 0.0f);
-					circle->Init(world);
-					shapeList.push_front(circle);
-					createTime = creationTimer.getElapsedTime();
-				}
-			}
+      //Read and take care of any user inputs.
+      HandleControls();
 
 			for (std::list<Shapes*>::iterator iter = shapeList.begin(); iter != shapeList.end(); ++iter)
 			{
@@ -82,14 +71,65 @@ public:
 				(*iter)->Draw(window);
 			}
 
-		window.display();
+		window->display();
 		}
 	}
 
 private:
 
     b2World* world;
-    Circle* circle;
+    Circle* circle, *planet;
+    std::list<Shapes *> shapeList;
+		sf::Clock creationTimer;
+		sf::Time createPause, createTime;
+    sf::RenderWindow* window;
+
+    void HandleControls()
+    {
+      if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				if (createTime.asMilliseconds() + createPause.asMilliseconds() < sf::Time(creationTimer.getElapsedTime()).asMilliseconds())
+				{
+					//float radius = 1.0f;	
+
+					//circle = new Circle(radius, b2Vec2(sf::Mouse::getPosition(*window).x * SCALE, (window->getSize().y - sf::Mouse::getPosition(*window).y) * SCALE), 0.0f, 1.0f, 0.15f,
+            //b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, 0.0f, 0.0f);
+
+					//circle->Init(world);
+					//shapeList.push_front(circle);
+					createTime = creationTimer.getElapsedTime();
+
+          float clickX = (sf::Mouse::getPosition(*window).x - (window->getSize().x / 2.0f)) * SCALE;
+          float clickY = (-(sf::Mouse::getPosition(*window).y - (window->getSize().y / 2.0f))) * SCALE;
+
+          float planet_To_Player = planet->GetRadius() + Player::Instance()->GetSize().y / 2;
+
+          float playerX = planet_To_Player * sin(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD);
+          float playerY = planet_To_Player * cos(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD);
+
+          float radius = sqrt(pow(clickX - playerX, 2) + pow(clickY - playerY, 2));
+
+          float playerAngle = Player::Instance()->GetPlayerBox()->GetAngle();
+
+          float playerVecX = playerX + (sin(playerAngle * DEGTORAD) * radius);
+          float playerVecY = playerY + (cos(playerAngle * DEGTORAD) * radius);
+          float distance_PlayerVec_To_Click = sqrt(pow(playerVecX - clickX, 2) + pow(playerVecY - clickY, 2));
+          float shotAngle = acos((pow(radius, 2) + pow(radius, 2) - pow(distance_PlayerVec_To_Click, 2)) / (2 * pow(radius, 2))) * RADTODEG;
+          
+          std::cout << "Angle: " << shotAngle << std::endl;
+				}
+			}
+
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+      { 
+        Player::Instance()->GetPlayerBox()->SetAngle(-0.05f);
+      }
+
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+      {
+        Player::Instance()->GetPlayerBox()->SetAngle(0.05f);
+      }
+    }
 };
 
 #endif
