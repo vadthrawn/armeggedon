@@ -33,7 +33,7 @@ public:
 		createTime = creationTimer.getElapsedTime();
 
 		float planetRad = 2.0f;
-		planet = new Circle(planetRad, b2Vec2(20.0f, 15.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::stat, sf::Color::White, 5.0f, 30.0f);
+		planet = new Circle(planetRad, b2Vec2(20.0f, 15.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::stat, sf::Color::White, 0.05f, 20.0f);
 		planet->Init(world);
 
 		Player::Instance()->Init(b2Vec2(1.5f, 1.5f), planet->GetRadius(), planet->GetPos(), world);  
@@ -51,7 +51,7 @@ public:
 					window->close();
 			}
 
-			world->Step((1.f/980.f), 8, 3);
+			world->Step((1.f/60.f), 8, 3);
 			window->clear(sf::Color::Black);
 
       //Read and take care of any user inputs.
@@ -80,8 +80,8 @@ private:
     b2World* world;
     Circle* circle, *planet;
     std::list<Shapes *> shapeList;
-		sf::Clock creationTimer;
-		sf::Time createPause, createTime;
+	sf::Clock creationTimer;
+	sf::Time createPause, createTime;
     sf::RenderWindow* window;
 
     void HandleControls()
@@ -90,33 +90,33 @@ private:
 			{
 				if (createTime.asMilliseconds() + createPause.asMilliseconds() < sf::Time(creationTimer.getElapsedTime()).asMilliseconds())
 				{
-					//float radius = 1.0f;	
+					float rad = 1.0f;	
 
-					//circle = new Circle(radius, b2Vec2(sf::Mouse::getPosition(*window).x * SCALE, (window->getSize().y - sf::Mouse::getPosition(*window).y) * SCALE), 0.0f, 1.0f, 0.15f,
-            //b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, 0.0f, 0.0f);
+					circle = new Circle(rad, b2Vec2(sf::Mouse::getPosition(*window).x * SCALE, (window->getSize().y - sf::Mouse::getPosition(*window).y) * SCALE), 0.0f, 1.0f, 0.15f,
+						b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, 0.0f, 0.0f);
 
-					//circle->Init(world);
-					//shapeList.push_front(circle);
+					circle->Init(world);
+					shapeList.push_front(circle);
 					createTime = creationTimer.getElapsedTime();
 
-          float clickX = (sf::Mouse::getPosition(*window).x - (window->getSize().x / 2.0f)) * SCALE;
-          float clickY = (-(sf::Mouse::getPosition(*window).y - (window->getSize().y / 2.0f))) * SCALE;
+					float clickX = (sf::Mouse::getPosition(*window).x - (window->getSize().x / 2.0f)) * SCALE;
+					  float clickY = (-(sf::Mouse::getPosition(*window).y - (window->getSize().y / 2.0f))) * SCALE;
 
-          float planet_To_Player = planet->GetRadius() + Player::Instance()->GetSize().y / 2;
+					  float planet_To_Player = planet->GetRadius() + Player::Instance()->GetSize().y / 2;
 
-          float playerX = planet_To_Player * sin(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD);
-          float playerY = planet_To_Player * cos(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD);
+					  float playerX = planet_To_Player * sin(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD);
+					  float playerY = planet_To_Player * cos(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD);
 
-          float radius = sqrt(pow(clickX - playerX, 2) + pow(clickY - playerY, 2));
+					  float radius = sqrt(pow(clickX - playerX, 2) + pow(clickY - playerY, 2));
 
-          float playerAngle = Player::Instance()->GetPlayerBox()->GetAngle();
+					  float playerAngle = Player::Instance()->GetPlayerBox()->GetAngle();
 
-          float playerVecX = playerX + (sin(playerAngle * DEGTORAD) * radius);
-          float playerVecY = playerY + (cos(playerAngle * DEGTORAD) * radius);
-          float distance_PlayerVec_To_Click = sqrt(pow(playerVecX - clickX, 2) + pow(playerVecY - clickY, 2));
-          float shotAngle = acos((pow(radius, 2) + pow(radius, 2) - pow(distance_PlayerVec_To_Click, 2)) / (2 * pow(radius, 2))) * RADTODEG;
+					  float playerVecX = playerX + (sin(playerAngle * DEGTORAD) * radius);
+					  float playerVecY = playerY + (cos(playerAngle * DEGTORAD) * radius);
+					  float distance_PlayerVec_To_Click = sqrt(pow(playerVecX - clickX, 2) + pow(playerVecY - clickY, 2));
+					  float shotAngle = acos((pow(radius, 2) + pow(radius, 2) - pow(distance_PlayerVec_To_Click, 2)) / (2 * pow(radius, 2))) * RADTODEG;
           
-          std::cout << "Angle: " << shotAngle << std::endl;
+					  std::cout << "Angle: " << shotAngle << std::endl;
 				}
 			}
 
