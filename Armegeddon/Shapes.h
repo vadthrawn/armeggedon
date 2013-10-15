@@ -74,10 +74,13 @@ public:
     if (totalDistance > rhs->GetGravWellRadius())
       distBetweenX = distBetweenY = 0.0f;
 
-    b2Vec2 gravPercent = b2Vec2(distBetweenX / rhs->GetGravWellRadius(), distBetweenY / rhs->GetGravWellRadius());
-    b2Vec2 gravForce = b2Vec2(rhs->GetGravity() * gravPercent.x, rhs->GetGravity() * gravPercent.y);
-    
+    //b2Vec2 gravPercent = b2Vec2(1.0f - abs(distBetweenX / rhs->GetGravWellRadius()), 1.0f - abs(distBetweenY / rhs->GetGravWellRadius()));
+	float gravPercent = 1.0f - abs(totalDistance / rhs->GetGravWellRadius());
+
+    b2Vec2 gravForce = b2Vec2((distBetweenX * (rhs->GetGravity() * gravPercent) - body->GetLinearVelocity().x), (distBetweenY * (rhs->GetGravity() * gravPercent) - body->GetLinearVelocity().y));
+	
     body->ApplyForce(gravForce, rhs->GetBody()->GetWorldCenter());
+	//printf("x: %d, y: %d \n", gravForce.x, gravForce.y);
   }
 
   b2Body* GetBody()
