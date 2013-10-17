@@ -55,75 +55,80 @@ public:
 		fixtureDef.density = density;
 		fixtureDef.restitution = restitution;
 
-    if (type == Shapes::shapeType::stat)
-      texture.loadFromFile("Textures/planet.png");
+		if (type == Shapes::shapeType::stat)
+			texture.loadFromFile("Textures/planet.png");
 
-    if (type == Shapes::shapeType::kin)
-      texture.loadFromFile("Textures/gradius1.png");
+		if (type == Shapes::shapeType::kin)
+			texture.loadFromFile("Textures/gradius1.png");
 	}
 
 	virtual void Draw(sf::RenderWindow* window){}
 
-  void Attracted_To(Shapes* rhs)
-  {
-    float distBetweenX = rhs->GetBody()->GetPosition().x - body->GetPosition().x;
-    float distBetweenY = rhs->GetBody()->GetPosition().y - body->GetPosition().y;
-    
-    float totalDistance = sqrt(pow(distBetweenX, 2) + pow(distBetweenY, 2));
+    void Attracted_To(Shapes* rhs)
+    {
+	    float distBetweenX = rhs->GetBody()->GetPosition().x - body->GetPosition().x;
+        float distBetweenY = rhs->GetBody()->GetPosition().y - body->GetPosition().y;
+        
+        float totalDistance = sqrt(pow(distBetweenX, 2) + pow(distBetweenY, 2));
+		
+		if (totalDistance < rhs->GetGravWellRadius())
+		{
+			float gravPercent = 1.0f - abs(totalDistance / rhs->GetGravWellRadius());
+			float maxGravity = (rhs->GetGravity() * gravPercent) / 100.0f;
+			
+			float gravForceX = distBetweenX * maxGravity;
+			float gravForceY = distBetweenY * maxGravity;
+			
+			b2Vec2 gravForce = b2Vec2(gravForceX - body->GetLinearVelocity().x, gravForceY - body->GetLinearVelocity().y);
 
-    if (totalDistance > rhs->GetGravWellRadius())
-      distBetweenX = distBetweenY = 0.0f;
+			float x = gravForce.x;
+			float y = gravForce.y;
 
-    //b2Vec2 gravPercent = b2Vec2(1.0f - abs(distBetweenX / rhs->GetGravWellRadius()), 1.0f - abs(distBetweenY / rhs->GetGravWellRadius()));
-	float gravPercent = 1.0f - abs(totalDistance / rhs->GetGravWellRadius());
+			body->ApplyLinearImpulse(gravForce, rhs->GetBody()->GetWorldCenter());
+		}
+	}
 
-    b2Vec2 gravForce = b2Vec2((distBetweenX * (rhs->GetGravity() * gravPercent) - body->GetLinearVelocity().x), (distBetweenY * (rhs->GetGravity() * gravPercent) - body->GetLinearVelocity().y));
-	
-    body->ApplyForce(gravForce, rhs->GetBody()->GetWorldCenter());
-	//printf("x: %d, y: %d \n", gravForce.x, gravForce.y);
-  }
+	b2Body* GetBody()
+	{
+		return body;
+	}
 
-  b2Body* GetBody()
-  {
-    return body;
-  }
+	float& GetGravWellRadius()
+	{
+		return gravWellRad;
+	}
 
-  float& GetGravWellRadius()
-  {
-    return gravWellRad;
-  }
+	float& GetGravity()
+	{
+		return gravity;
+	}
 
-  float& GetGravity()
-  {
-    return gravity;
-  }
+	b2Vec2& GetPos()
+	{
+		return pos;
+	}
 
-  b2Vec2& GetPos()
-  {
-	  return pos;
-  }
+	void SetAngle(float _angle)
+	{
+		angle += _angle;
 
-  void SetAngle(float _angle)
-  {
-    angle += _angle;
+		if (angle > 359.95f)
+			angle = 0.00f;
+		else if (angle < 0.00f)
+			angle = 359.95f;
+		
+		body->SetTransform(body->GetPosition(), -angle * DEGTORAD);
+	}
 
-    if (angle > 359.95f)
-      angle = 0.00f;
-    else if (angle < 0.00f)
-      angle = 359.95f;
+	float GetAngle()
+	{
+		return angle;
+	}
 
-      body->SetTransform(body->GetPosition(), -angle * DEGTORAD);
-  }
-
-  float GetAngle()
-  {
-    return angle;
-  }
-
-  Shapes::shapeType& GetType()
-  {
-    return type;
-  }
+	Shapes::shapeType& GetType()
+	{
+		return type;
+	}
 
 protected:
 	b2Vec2 pos, linVel;
