@@ -1,8 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <iostream>
-
 #include <Shapes.h>
 
 class Player
@@ -18,14 +16,14 @@ public:
 	{
 		radius = _planetRad;
 		angle = 0.0f;
-    size = _size;
+		size = _size;
 
 		b2Vec2* vertices = new b2Vec2[4];
 
-		vertices[0] = b2Vec2(-_size.x / 2, radius + _size.y);
-		vertices[1] = b2Vec2(-_size.x / 2, radius - _size.y);
-		vertices[2] = b2Vec2(_size.x / 2, radius - _size.y);
-		vertices[3] = b2Vec2(_size.x / 2, radius + _size.y);
+		vertices[0] = b2Vec2(-size.x / 2, radius + size.y);
+		vertices[1] = b2Vec2(-size.x / 2, radius);
+		vertices[2] = b2Vec2(size.x / 2, radius);
+		vertices[3] = b2Vec2(size.x / 2, radius + size.y);
 
 		playerBox = new Polygon(vertices, 4, _planetPos, angle, 1.0f, 0.0f, b2Vec2(0.0f, 0.0f),
 			0.0f, Shapes::shapeType::kin, sf::Color::White, 0.0f, 0.0f);

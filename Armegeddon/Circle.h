@@ -38,7 +38,7 @@ public:
 		shape->setPosition(body->GetPosition().x / SCALE, window->getSize().y - (body->GetPosition().y / SCALE));
 		shape->setRotation(angle);
 
-    shape->setTextureRect(sf::IntRect(0, 0, 133, 134));
+		shape->setTextureRect(sf::IntRect(0, 0, 133, 134));
 
 		window->draw(*shape);
 	}

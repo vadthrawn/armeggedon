@@ -12,6 +12,8 @@ public:
 	{
 		vertSize = _vertSize;
 		vertices = new b2Vec2[vertSize];
+		textureSize = std::vector<int>(17, 18);
+		textureMultiplier = 0;
 
 		for (int i = 0; i < vertSize; ++i)
 			vertices[i].Set(_vertices[i].x, _vertices[i].y);
@@ -43,16 +45,28 @@ public:
 		shape->setPosition(body->GetPosition().x / SCALE, window->getSize().y - (body->GetPosition().y / SCALE));
 		shape->setRotation(angle);
 
-     shape->setTextureRect(sf::IntRect(324, 63, 17, 18));
+		shape->setTextureRect(sf::IntRect(227 + (24 * textureMultiplier), 63, textureSize.front(), textureSize.back()));
 
 		window->draw(*shape);
 	}
 
+	sf::ConvexShape* GetShape()
+	{
+		return shape;
+	}
+
+	void SetTextureMultiplier(int _textureMultiplier)
+	{
+		textureMultiplier = _textureMultiplier;
+	}
+
 protected:
-  int vertSize;
-  b2Vec2* vertices;
-  b2PolygonShape polyShape;
+	int vertSize;
+	b2Vec2* vertices;
+	b2PolygonShape polyShape;
 	sf::ConvexShape* shape;
+	std::vector<int> textureSize;
+	int textureMultiplier;
 };
 
 #endif
