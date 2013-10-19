@@ -30,6 +30,7 @@ public:
 		color = _color;
 		gravity = _gravity;
 		gravWellRad = _gravWellRad;
+		counter = 0;
 	}
 
 	virtual void Init(b2World* world)
@@ -66,31 +67,43 @@ public:
 
     void Attracted_To(Shapes* rhs)
     {
-	    float distBetweenX = rhs->GetBody()->GetPosition().x - body->GetPosition().x;
-        float distBetweenY = rhs->GetBody()->GetPosition().y - body->GetPosition().y;
-        
-        float totalDistance = sqrt(pow(distBetweenX, 2) + pow(distBetweenY, 2));
-		
-		if (totalDistance < rhs->GetGravWellRadius())
+		float planetRadius = rhs->GetBody()->GetFixtureList()->GetShape()->m_radius;
+		b2Vec2 bodyPos = this->GetBody()->GetPosition();
+		b2Vec2 planetPos = rhs->GetPos();
+
+		b2Vec2 planetDistance = b2Vec2(0.0f, 0.0f);
+		planetDistance += bodyPos;
+		planetDistance -= planetPos;
+
+		float finalDistance = planetDistance.Length();
+
+		if (finalDistance <= planetRadius * rhs->GetGravWellRadius())
 		{
-			float gravPercent = 1.0f - abs(totalDistance / rhs->GetGravWellRadius());
-			float maxGravity = (rhs->GetGravity() * gravPercent) / 100.0f;
-			
-			float gravForceX = distBetweenX * maxGravity;
-			float gravForceY = distBetweenY * maxGravity;
-			
-			b2Vec2 gravForce = b2Vec2(gravForceX - body->GetLinearVelocity().x, gravForceY - body->GetLinearVelocity().y);
+			planetDistance.x = planetDistance.x * -1;
+			planetDistance.y = planetDistance.y * -1;
 
-			float x = gravForce.x;
-			float y = gravForce.y;
+			float vecSum = abs(planetDistance.x) + abs(planetDistance.y);
+			planetDistance.x = planetDistance.x * ((1 / vecSum) * planetRadius / finalDistance);
+			planetDistance.y = planetDistance.y * ((1 / vecSum) * planetRadius / finalDistance);
 
-			body->ApplyLinearImpulse(gravForce, rhs->GetBody()->GetWorldCenter());
+			this->GetBody()->ApplyForce(planetDistance, this->GetPos());
+
+			//float mod = 1.0f;
+			//if (float sum = abs(this->GetBody()->GetLinearVelocity().x) + abs(this->GetBody()->GetLinearVelocity().y) > mod)
+			//{
+				//this->GetBody()->SetLinearVelocity(b2Vec2(this->GetBody()->GetLinearVelocity().x * (mod / mod), this->GetBody()->GetLinearVelocity().y * (mod / sum)));
+			//}
 		}
 	}
 
 	b2Body* GetBody()
 	{
 		return body;
+	}
+
+	sf::Color GetColor()
+	{
+		return color;
 	}
 
 	float& GetGravWellRadius()
@@ -112,10 +125,10 @@ public:
 	{
 		angle += _angle;
 
-		if (angle > 359.95f)
+		if (angle > 359.9f)
 			angle = 0.00f;
 		else if (angle < 0.00f)
-			angle = 359.95f;
+			angle = 359.9f;
 		
 		body->SetTransform(body->GetPosition(), -angle * DEGTORAD);
 	}
@@ -130,6 +143,11 @@ public:
 		return type;
 	}
 
+	b2FixtureDef GetFixture()
+	{
+		return fixtureDef;
+	}
+
 protected:
 	b2Vec2 pos, linVel;
 	float angle, density, angVel, restitution, gravity, gravWellRad;
@@ -139,6 +157,7 @@ protected:
 	b2FixtureDef fixtureDef;
 	sf::Color color;
 	sf::Texture texture;
+	int counter;
 };
 
 #endif
