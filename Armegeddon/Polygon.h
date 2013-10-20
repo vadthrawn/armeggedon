@@ -7,8 +7,8 @@ class Polygon : public Shapes
 {
 public:
 	Polygon(b2Vec2 _vertices[], int _vertSize, b2Vec2 _pos, float _angle, float _density,
-		float _restitution, b2Vec2 _linVel, float _angVel, shapeType _type, sf::Color _color, float _gravity, float _gravWellRad) : 
-			Shapes(_pos, _angle, _density, _restitution, _linVel, _angVel, _type, _color, _gravity, _gravWellRad)
+		float _restitution, b2Vec2 _linVel, float _angVel, shapeType _type, sf::Color _color, char* _textureFile, bool _isAlive) : 
+			Shapes(_pos, _angle, _density, _restitution, _linVel, _angVel, _type, _color, _textureFile, _isAlive)
 	{
 		vertSize = _vertSize;
 		vertices = new b2Vec2[vertSize];
@@ -36,7 +36,7 @@ public:
     for (int i = 0; i < vertSize; ++i)
       shape->setPoint(i, sf::Vector2f(vertices[i].x / SCALE, -vertices[i].y / SCALE));
 
-    if (type == Shapes::shapeType::kin)
+    if (isTextured)
       shape->setTexture(&texture);
 	}
 
@@ -61,12 +61,11 @@ public:
 	}
 
 protected:
-	int vertSize;
+	int vertSize, textureMultiplier;
 	b2Vec2* vertices;
 	b2PolygonShape polyShape;
 	sf::ConvexShape* shape;
 	std::vector<int> textureSize;
-	int textureMultiplier;
 };
 
 #endif

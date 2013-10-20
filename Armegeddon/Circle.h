@@ -6,11 +6,11 @@
 class Circle : public Shapes
 {
 public:
-	Circle(float _radius, b2Vec2 _pos, float _angle, float _density,
-		float _restitution, b2Vec2 _linVel, float _angVel, shapeType _type, sf::Color _color, float _gravity, float _gravWellRad) :
-			Shapes(_pos, _angle, _density, _restitution, _linVel, _angVel, _type, _color, _gravity, _gravWellRad)
+	Circle(float _radius, b2Vec2 _pos, float _angle, float _density, float _restitution, b2Vec2 _linVel,
+		float _angVel, shapeType _type, sf::Color _color, char* _textureFile, bool _isAlive) :
+			Shapes(_pos, _angle, _density, _restitution, _linVel, _angVel, _type, _color, _textureFile, _isAlive)
 	{
-		radius = _radius;
+		circleShape.m_radius = _radius;
 	}
 
 	void Init(b2World* world)
@@ -19,18 +19,17 @@ public:
 		body = world->CreateBody(&bodyDef);
 
 		circleShape.m_p.SetZero();
-		circleShape.m_radius = radius;
 
 		fixtureDef.shape = &circleShape;
 		body->CreateFixture(&fixtureDef);
 
 		shape = new sf::CircleShape;
-		shape->setRadius(radius / SCALE);
-		shape->setOrigin(radius / SCALE, radius / SCALE);
+		shape->setRadius(circleShape.m_radius / SCALE);
+		shape->setOrigin(circleShape.m_radius / SCALE, circleShape.m_radius / SCALE);
 		shape->setFillColor(color);
 
-    if (type == Shapes::shapeType::stat)
-      shape->setTexture(&texture);
+		if (isTextured)
+			shape->setTexture(&texture);
 	}
 
 	void Draw(sf::RenderWindow* window)
@@ -43,13 +42,12 @@ public:
 		window->draw(*shape);
 	}
 
-  float GetRadius()
-  {
-    return radius;
-  }
+	float& GetRadius()
+	{
+		return circleShape.m_radius;
+	}
 
 protected:
-	float radius;
 	b2CircleShape circleShape;
 	sf::CircleShape* shape;
 };

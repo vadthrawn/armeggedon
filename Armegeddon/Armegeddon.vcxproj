@@ -86,6 +86,8 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="Shapes.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Textures\gradius1.png" />
