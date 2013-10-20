@@ -1,16 +1,12 @@
 #ifndef ARMAGEDDON_H
 #define ARMAGEDDON_H
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
-
-#include <Box2D/Box2D.h>
-
 #include <Box.h>
 #include <Circle.h>
 #include <Polygon.h>
 #include <Player.h>
+#include <Window.h>
+#include <World.h>
 
 #include <list>
 
@@ -23,76 +19,86 @@ public:
 
 	Armageddon()
 	{
-		window = new sf::RenderWindow(sf::VideoMode(800, 600, 32), "Armageddon", sf::Style::Default); 
-		world = new b2World(b2Vec2(0.0f, 0.0f));
+		//Create the window using SFML and the world to hold Box2D objects
+		Window::Instance();
+		World::Instance();
 
+		//Create the player character
 		Player::Instance();
+		
+		//Set the bullet timer and pause between bullet shots
+		bulletPause = sf::milliseconds(250);
+		bulletTime = currentTimer.getElapsedTime();
 
-		createPause = sf::milliseconds(250);
-		createTime = creationTimer.getElapsedTime();
+		//Set the debris timer and pause between spawning debris
+		debrisPause = sf::milliseconds(1000);
+		debrisTime = currentTimer.getElapsedTime();
+		
+		//Create the planet, initialize its values to the world, and set its gravity well radius based on the window size
+		planet = new Circle(2.0f, b2Vec2((Window::Instance()->getSize().x * SCALE) / 2.0f, (Window::Instance()->getSize().y * SCALE) / 2.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f),
+			0.0f, Shapes::shapeType::stat, sf::Color::White, "Textures/planet.png", true);
+		planet->Init(World::Instance());
+		planet->SetGravWellRadius(sqrt(pow(planet->GetPosition().x - ((Window::Instance()->getSize().x * SCALE) + 1.0f), 2) +
+			pow(planet->GetPosition().y - ((Window::Instance()->getSize().y * SCALE) + 1.0f), 2)));
 
-		float planetRad = 2.0f;
-		planet = new Circle(planetRad, b2Vec2(20.0f, 15.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::stat, sf::Color::White, 0.0f, 25.0f);
-		planet->Init(world);
+		//Initialize the player object in relation to the planet and world.
+		Player::Instance()->Init(b2Vec2(1.5f, 1.5f), planet->GetRadius(), planet->GetPosition(), World::Instance());
 
-		circle = new Circle(1.0f, b2Vec2(41.0f, 31.0f), 0.0f, 1.0f, 0.25f, b2Vec2((20.0f - 41.0f) * .01f, (15.0f - 31.0f) * .01f), 1.0f, Shapes::shapeType::dyn, sf::Color::Yellow, 0.0f, 0.0f);
-		circle->Init(world);
+		//Create 8 bullets and place them in a vector list then initialize the objects.
+		for (int i = 0; i < 8; i++)
+			bulletList.push_back(new Circle(0.10f, b2Vec2(Window::Instance()->getSize().x + 0.40f * i, Window::Instance()->getSize().y + 10.0f),
+				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::kin, sf::Color::White, "", false));
 
-		Player::Instance()->Init(b2Vec2(1.5f, 1.5f), planet->GetRadius(), planet->GetPos(), world);
+		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+			(*iter)->Init(World::Instance());
 
-		shapeList.push_front(planet);
-		shapeList.push_front(Player::Instance()->GetPlayerBox());
-		shapeList.push_front(circle);
+		//Create the space debris and place them in a vector list then initialize the objects.
+		for (int i = 0; i < 15; i++)
+			debrisList.push_back(new Circle(1.0f, b2Vec2(Window::Instance()->getSize().x + 4.0f * i, Window::Instance()->getSize().y + 20.0f),
+				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, "", false));
 
-		circle = new Circle(1.0f, b2Vec2(-1.0f, 15.0f), 0.0f, 1.0f, 0.5f, b2Vec2((20.0f - (-1.0f)) * .01f, (15.0f - 15.0f) * .01f), 1.0f, Shapes::shapeType::dyn, sf::Color::Yellow, 0.0f, 0.0f);
-		circle->Init(world);
-		shapeList.push_front(circle);
+		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
+			(*iter)->Init(World::Instance());
 
-		while (window->isOpen())
+		while (Window::Instance()->isOpen())
 		{
 			sf::Event event;
 
-			while (window->pollEvent(event))
+			while (Window::Instance()->pollEvent(event))
 			{
 				if (event.type == sf::Event::Closed)
-					window->close();
+					Window::Instance()->close();
 			}
 
-			world->Step((1.0f/240.0f), 8, 3);
-			window->clear(sf::Color::Black);
+			World::Instance()->Step((1.0f/240.0f), 8, 3);
+			Window::Instance()->clear(sf::Color::Black);
 
-      //Read and take care of any user inputs.
-      HandleControls();
+			//Read and take care of any user inputs.
+			HandleControls();
 
-			for (std::list<Shapes*>::iterator iter = shapeList.begin(); iter != shapeList.end(); ++iter)
-			{
-				if ((*iter)->GetType() == Shapes::shapeType::stat)
-				{
-					for (std::list<Shapes*>::iterator iter2 = shapeList.begin(); iter2 != shapeList.end(); ++iter2)
-					{
-						if ((*iter2)->GetType() == Shapes::shapeType::dyn)
-							(*iter2)->Attracted_To((*iter));
-					}
-				}
-				(*iter)->Draw(window);
-			}
+			//Spawn any debris objects that the game needs.
+			CreateDebris();
+			
+			//Draw the game elements.
+			Draw();
 
-		window->display();
+			//Check if any bullets are outside the boundries of the game window.  Is so, we recollect the bullet for later use.
+			BulletRangeCheck();
+
+			Window::Instance()->display();
 		}
 	}
 
 private:
+    Circle* planet;
+    std::vector<Shapes*> bulletList, debrisList;
+	sf::Clock currentTimer;
+	sf::Time bulletPause, bulletTime, debrisPause, debrisTime;
 
-    b2World* world;
-    Circle* circle, *planet;
-    std::list<Shapes *> shapeList;
-	sf::Clock creationTimer;
-	sf::Time createPause, createTime;
-    sf::RenderWindow* window;
-
+	//A function the handle the controls for the game.
     void HandleControls()
     {
-		b2Vec2 getMousePosition = b2Vec2((sf::Mouse::getPosition(*window).x - (window->getSize().x / 2.0f)) * SCALE, (-(sf::Mouse::getPosition(*window).y - (window->getSize().y / 2.0f))) * SCALE); 
+		b2Vec2 getMousePosition = b2Vec2((sf::Mouse::getPosition(*Window::Instance()).x - (Window::Instance()->getSize().x / 2.0f)) * SCALE, (-(sf::Mouse::getPosition(*Window::Instance()).y - (Window::Instance()->getSize().y / 2.0f))) * SCALE); 
 		b2Vec2 bulletDirection = getMousePosition;
 
 		float shotAngle = 0.0f;
@@ -129,23 +135,26 @@ private:
 
       if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				if (createTime.asMilliseconds() + createPause.asMilliseconds() < sf::Time(creationTimer.getElapsedTime()).asMilliseconds())
+				//Check to see if the player has recently fired a shot and if the shot is within the 260 degree arc over the player object.
+				if (bulletTime.asMilliseconds() + bulletPause.asMilliseconds() < sf::Time(currentTimer.getElapsedTime()).asMilliseconds() && shotAngle >= -130.0f && shotAngle <= 130.0f)
 				{
-					float rad = 0.10f;
 					bulletDirection = b2Vec2((bulletDirection.x - GetPlayerX()) / GetPlayerToClickRadius(bulletDirection.x, bulletDirection.y), (bulletDirection.y - GetPlayerY())/ GetPlayerToClickRadius(bulletDirection.x, bulletDirection.y));
 
-					circle = new Circle(rad, b2Vec2((window->getSize().x / 2) * SCALE + GetPlayerX(), (window->getSize().y / 2) * SCALE + GetPlayerY()), 0.0f, 1.0f, 0.25f,
-						bulletDirection, 0.0f, Shapes::shapeType::kin, sf::Color::White, 0.0f, 0.0f);
+					//Go through the bullet list and see if you can find any bullets that are not being used (isAlive)
+					for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+					{
+						if (!(*iter)->IsAlive())
+						{
+							//A bullet has been found.  Set it as alive along with its new position and linear velocity.
+							(*iter)->SetIsAlive(true);
+							(*iter)->SetLinearVelocity(bulletDirection);
+							(*iter)->SetPosition(b2Vec2((Window::Instance()->getSize().x / 2) * SCALE + GetPlayerX(), (Window::Instance()->getSize().y / 2) * SCALE + GetPlayerY()));
 
-					circle->Init(world);
-					shapeList.push_back(circle);
-					createTime = creationTimer.getElapsedTime();
-
-					printf("Shot Angle: %f\n", shotAngle);
-					printf("MouseRotateX: %f MouseRotateY: %f\n", getMousePosition.x, getMousePosition.y);
-					printf("BulletX: %f BulletY: %f\n", bulletDirection.x, bulletDirection.y);
-					printf("PlayerX: %f PlayerY: %f\n", GetPlayerX(), GetPlayerY());
-					printf("Player Angle: %f\n\n", GetPlayerAngle());
+							//Get the current time that the bullet was fired.
+							bulletTime = currentTimer.getElapsedTime();
+							break;
+						}
+					}
 				}
 			}
 
@@ -160,19 +169,96 @@ private:
 		}
 	}
 
-	float DistanceFromPlanetToPlayer()
+	//A function to handle drawing the elements in the game window.
+	void Draw()
+	{
+	//Check which debris items are alive.  If they are alive, have gravity to the planet affect it and draw the debris.
+		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); ++iter)
+		{
+			if ((*iter)->IsAlive())
+			{
+				(*iter)->Attracted_To(planet);
+				(*iter)->Draw(Window::Instance());
+			}
+		}
+
+		//Check which bullets are alive.  If they are alive, draw them.
+		for(std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+		{
+			if ((*iter)->IsAlive())
+				(*iter)->Draw(Window::Instance());
+		}
+
+		//Draw the player and planet last.
+		Player::Instance()->GetPlayerBox()->Draw(Window::Instance());
+		planet->Draw(Window::Instance());
+	}
+
+	//A function to recollect bullets after they have either collided with an object of left the window space.
+	void CollectBullet(Shapes* bullet, int listPlace)
+	{
+		bullet->SetIsAlive(false);
+		bullet->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+		bullet->SetPosition(b2Vec2(Window::Instance()->getSize().x + 0.40f * listPlace, Window::Instance()->getSize().y + 10.0f));
+	}
+
+	//A function to check if the bullets have left the play field.
+	void BulletRangeCheck()
+	{
+		int i = 0;
+
+		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+		{
+			if ((*iter)->IsAlive())
+			{
+				if ((*iter)->GetPosition().x < -1.0f || (*iter)->GetPosition().x > Window::Instance()->getSize().x * SCALE + 1.0f ||
+					(*iter)->GetPosition().y < -1.0f || (*iter)->GetPosition().y > Window::Instance()->getSize().y * SCALE + 1.0f)
+						CollectBullet(*iter, i);
+			}
+
+			i++;
+		}
+	}
+
+	//A function to create a new debris object in the game.
+	void CreateDebris()
+	{
+		if (currentTimer.getElapsedTime().asMilliseconds() > debrisTime.asMilliseconds() + debrisPause.asMilliseconds())
+		{
+			for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
+			{
+				if (!(*iter)->IsAlive())
+				{
+					int random = rand() % 360;
+					b2Vec2 debrisPoint = GetPointAroundGravityWell(planet->GetGravWellRadius(), planet->GetPosition(), random);
+					(*iter)->SetPosition(debrisPoint);
+
+					b2Vec2 debrisVec = b2Vec2((-(debrisPoint.x - planet->GetPosition().x) / planet->GetGravWellRadius() / 4.0f), (-(debrisPoint.y - planet->GetPosition().y)) / planet->GetGravWellRadius() / 4.0f);
+					(*iter)->SetLinearVelocity(debrisVec);
+
+					(*iter)->SetIsAlive(true);
+					break;
+				}
+			}
+			
+			debrisTime = currentTimer.getElapsedTime();
+		}
+	}
+
+	//Getters
+	float GetDistanceFromPlanetToPlayer()
 	{
 		return (planet->GetRadius() + Player::Instance()->GetSize().y / 2.0f);
 	}
 
 	float GetPlayerX()
 	{
-		return (DistanceFromPlanetToPlayer() * sin(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD));
+		return (GetDistanceFromPlanetToPlayer() * sin(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD));
 	}
 
 	float GetPlayerY()
 	{
-		return (DistanceFromPlanetToPlayer() * cos(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD));
+		return (GetDistanceFromPlanetToPlayer() * cos(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD));
 	}
 
 	float GetPlayerToClickRadius(const float clickX, const float clickY)
@@ -196,6 +282,7 @@ private:
 		return (sqrt(pow(GetPlayerVector(clickX, clickY).x - clickX, 2) + pow(GetPlayerVector(clickX, clickY).y - clickY, 2)));
 	}
 
+	//A function to get the point in relation to the player object.
 	void RotatePosition(const float &playerX, const float &playerY, const float &angle, b2Vec2 &mousePosition)
 	{
 		float newX = ((mousePosition.x - playerX) * cos(angle)) - ((playerY - mousePosition.y) * sin(angle));
@@ -203,6 +290,12 @@ private:
 
 		mousePosition.x = newX; //+ playerX;
 		mousePosition.y = -newY; //+ playerY;
+	}
+
+	//A function to get the point around the outside edge of the gravity well given angle, radius, and origin point.
+	b2Vec2 GetPointAroundGravityWell(const float &_radius, const b2Vec2 &_origin, const int &_angle)
+	{
+		return (b2Vec2(_origin.x + _radius * sin(_angle * DEGTORAD), _origin.y + _radius * cos(_angle * DEGTORAD)));
 	}
 };
 
