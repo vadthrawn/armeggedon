@@ -7,8 +7,8 @@ class Circle : public Shapes
 {
 public:
 	Circle(float _radius, b2Vec2 _pos, float _angle, float _density, float _restitution, b2Vec2 _linVel,
-		float _angVel, shapeType _type, sf::Color _color, char* _textureFile, bool _isAlive) :
-			Shapes(_pos, _angle, _density, _restitution, _linVel, _angVel, _type, _color, _textureFile, _isAlive)
+		float _angVel, shapeType _type, sf::Color _color, char* _textureFile, bool _isAlive, char* _desc) :
+			Shapes(_pos, _angle, _density, _restitution, _linVel, _angVel, _type, _color, _textureFile, _isAlive, _desc)
 	{
 		circleShape.m_radius = _radius;
 	}

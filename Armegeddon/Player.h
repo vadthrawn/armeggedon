@@ -23,7 +23,7 @@ public:
 		vertices[3] = b2Vec2(_size.x / 2, _planetRad + _size.y);
 
 		playerBox = new Polygon(vertices, 4, _planetPos, 0.0f, 1.0f, 0.0f, b2Vec2(0.0f, 0.0f),
-			0.0f, Shapes::shapeType::kin, sf::Color::White, "Textures/gradius1.png", true);
+			0.0f, Shapes::shapeType::kin, sf::Color::White, "Textures/gradius1.png", true, "player");
 
 		playerBox->Init(_world);
 	}

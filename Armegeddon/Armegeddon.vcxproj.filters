@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Textures">
       <UniqueIdentifier>{a8c7a320-8fad-44e0-99dc-b90e6918680d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Sounds">
+      <UniqueIdentifier>{aaea980e-ae8e-49e1-bdef-6e4b09f92d46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -50,6 +53,12 @@
     <ClInclude Include="World.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Background.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Textures\planet.png">
@@ -57,6 +66,12 @@
     </None>
     <None Include="Textures\gradius1.png">
       <Filter>Source Files\Textures</Filter>
+    </None>
+    <None Include="Textures\starfield.png">
+      <Filter>Source Files\Textures</Filter>
+    </None>
+    <None Include="..\..\..\Downloads\explosion-01.wav">
+      <Filter>Source Files\Sounds</Filter>
     </None>
   </ItemGroup>
 </Project>
