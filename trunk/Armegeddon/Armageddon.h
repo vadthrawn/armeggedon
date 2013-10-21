@@ -7,36 +7,43 @@
 #include <Player.h>
 #include <Window.h>
 #include <World.h>
+#include <Background.h>
+#include <SoundManager.h>
 
 #include <list>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-class Armageddon
+class Armageddon : public b2ContactListener
 {
 public:
-
 	Armageddon()
 	{
-		//Create the window using SFML and the world to hold Box2D objects
-		Window::Instance();
-		World::Instance();
-
 		//Create the player character
 		Player::Instance();
+
+		//Set this class to listen for collisions
+		World::Instance()->SetContactListener(this);
+
+		//Create the background;
+		background = new Background("Textures/starfield.png");
+
+		//Create the sound manager in preparation to use sounds.
+		soundManager = new SoundManager();
+		soundManager->SetExplosion("Sounds/explosion-01.wav");
 		
 		//Set the bullet timer and pause between bullet shots
 		bulletPause = sf::milliseconds(250);
 		bulletTime = currentTimer.getElapsedTime();
 
 		//Set the debris timer and pause between spawning debris
-		debrisPause = sf::milliseconds(1000);
+		debrisPause = sf::milliseconds(2000);
 		debrisTime = currentTimer.getElapsedTime();
 		
 		//Create the planet, initialize its values to the world, and set its gravity well radius based on the window size
 		planet = new Circle(2.0f, b2Vec2((Window::Instance()->getSize().x * SCALE) / 2.0f, (Window::Instance()->getSize().y * SCALE) / 2.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f),
-			0.0f, Shapes::shapeType::stat, sf::Color::White, "Textures/planet.png", true);
+			0.0f, Shapes::shapeType::stat, sf::Color::White, "Textures/planet.png", true, "planet");
 		planet->Init(World::Instance());
 		planet->SetGravWellRadius(sqrt(pow(planet->GetPosition().x - ((Window::Instance()->getSize().x * SCALE) + 1.0f), 2) +
 			pow(planet->GetPosition().y - ((Window::Instance()->getSize().y * SCALE) + 1.0f), 2)));
@@ -47,7 +54,7 @@ public:
 		//Create 8 bullets and place them in a vector list then initialize the objects.
 		for (int i = 0; i < 8; i++)
 			bulletList.push_back(new Circle(0.10f, b2Vec2(Window::Instance()->getSize().x + 0.40f * i, Window::Instance()->getSize().y + 10.0f),
-				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::kin, sf::Color::White, "", false));
+				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::kin, sf::Color::White, "", false, "bullet"));
 
 		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
 			(*iter)->Init(World::Instance());
@@ -55,7 +62,7 @@ public:
 		//Create the space debris and place them in a vector list then initialize the objects.
 		for (int i = 0; i < 15; i++)
 			debrisList.push_back(new Circle(1.0f, b2Vec2(Window::Instance()->getSize().x + 4.0f * i, Window::Instance()->getSize().y + 20.0f),
-				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, "", false));
+				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, "", false, "debris"));
 
 		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
 			(*iter)->Init(World::Instance());
@@ -72,6 +79,9 @@ public:
 
 			World::Instance()->Step((1.0f/240.0f), 8, 3);
 			Window::Instance()->clear(sf::Color::Black);
+			
+			//Remove any destroyed bullets and debris
+			RemoveDestroyedItems();
 
 			//Read and take care of any user inputs.
 			HandleControls();
@@ -94,6 +104,9 @@ private:
     std::vector<Shapes*> bulletList, debrisList;
 	sf::Clock currentTimer;
 	sf::Time bulletPause, bulletTime, debrisPause, debrisTime;
+	b2Vec2 windowSize;
+	Background* background;
+	SoundManager* soundManager;
 
 	//A function the handle the controls for the game.
     void HandleControls()
@@ -135,8 +148,8 @@ private:
 
       if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				//Check to see if the player has recently fired a shot and if the shot is within the 260 degree arc over the player object.
-				if (bulletTime.asMilliseconds() + bulletPause.asMilliseconds() < sf::Time(currentTimer.getElapsedTime()).asMilliseconds() && shotAngle >= -130.0f && shotAngle <= 130.0f)
+				//Check to see if the player has recently fired a shot and if the shot is within the 220 degree arc over the player object.
+				if (bulletTime.asMilliseconds() + bulletPause.asMilliseconds() < sf::Time(currentTimer.getElapsedTime()).asMilliseconds() && shotAngle >= -110.0f && shotAngle <= 110.0f)
 				{
 					bulletDirection = b2Vec2((bulletDirection.x - GetPlayerX()) / GetPlayerToClickRadius(bulletDirection.x, bulletDirection.y), (bulletDirection.y - GetPlayerY())/ GetPlayerToClickRadius(bulletDirection.x, bulletDirection.y));
 
@@ -172,7 +185,10 @@ private:
 	//A function to handle drawing the elements in the game window.
 	void Draw()
 	{
-	//Check which debris items are alive.  If they are alive, have gravity to the planet affect it and draw the debris.
+		//Draw the background first.
+		background->Draw(Window::Instance());
+
+		//Check which debris items are alive.  If they are alive, have gravity to the planet affect it and draw the debris.
 		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); ++iter)
 		{
 			if ((*iter)->IsAlive())
@@ -245,6 +261,43 @@ private:
 		}
 	}
 
+	//A function to remove any destroyed bullets and debris
+	void RemoveDestroyedItems()
+	{
+		int i = 0;
+
+		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
+		{
+			if ((*iter)->IsDestroyed())
+			{
+				(*iter)->SetIsAlive(false);
+				(*iter)->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+				(*iter)->SetPosition(b2Vec2(Window::Instance()->getSize().x + 4.0f * i, Window::Instance()->getSize().y + 20.0f));
+				(*iter)->SetIsDestroyed(false);
+				soundManager->PlayExplosion();
+				break;
+			}
+
+			i++;
+		}
+
+		i = 0;
+
+		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+		{
+			if ((*iter)->IsDestroyed())
+			{
+				(*iter)->SetIsDestroyed(true);
+				(*iter)->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
+				(*iter)->SetPosition(b2Vec2(Window::Instance()->getSize().x + 0.40f * i, Window::Instance()->getSize().y + 10.0f));
+				(*iter)->SetIsDestroyed(false);
+				break;
+			}
+
+			i++;
+		}
+	}
+
 	//Getters
 	float GetDistanceFromPlanetToPlayer()
 	{
@@ -296,6 +349,60 @@ private:
 	b2Vec2 GetPointAroundGravityWell(const float &_radius, const b2Vec2 &_origin, const int &_angle)
 	{
 		return (b2Vec2(_origin.x + _radius * sin(_angle * DEGTORAD), _origin.y + _radius * cos(_angle * DEGTORAD)));
+	}
+
+	void BeginContact(b2Contact* contact)
+	{
+		char* fixtureA = (char*)contact->GetFixtureA()->GetUserData();
+		char* fixtureB = (char*)contact->GetFixtureB()->GetUserData();
+
+		if (fixtureA == "bullet")
+		{
+			for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+			{
+				if ((*iter)->GetBody() == contact->GetFixtureA()->GetBody())
+				{
+					(*iter)->SetIsDestroyed(true);
+					break;
+				}
+			}
+		}
+
+		else if (fixtureA == "debris")
+		{
+			for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
+			{
+				if ((*iter)->GetBody() == contact->GetFixtureA()->GetBody())
+				{
+					(*iter)->SetIsDestroyed(true);
+					break;
+				}
+			}
+		}
+
+		if (fixtureB == "bullet")
+		{
+			for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+			{
+				if ((*iter)->GetBody() == contact->GetFixtureB()->GetBody())
+				{
+					(*iter)->SetIsDestroyed(true);
+					break;
+				}
+			}
+		}
+
+		else if (fixtureB == "debris")
+		{
+			for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
+			{
+				if ((*iter)->GetBody() == contact->GetFixtureB()->GetBody())
+				{
+					(*iter)->SetIsDestroyed(true);
+					break;
+				}
+			}
+		}
 	}
 };
 

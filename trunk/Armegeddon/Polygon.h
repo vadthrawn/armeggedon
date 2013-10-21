@@ -7,8 +7,8 @@ class Polygon : public Shapes
 {
 public:
 	Polygon(b2Vec2 _vertices[], int _vertSize, b2Vec2 _pos, float _angle, float _density,
-		float _restitution, b2Vec2 _linVel, float _angVel, shapeType _type, sf::Color _color, char* _textureFile, bool _isAlive) : 
-			Shapes(_pos, _angle, _density, _restitution, _linVel, _angVel, _type, _color, _textureFile, _isAlive)
+		float _restitution, b2Vec2 _linVel, float _angVel, shapeType _type, sf::Color _color, char* _textureFile, bool _isAlive, char* _desc) : 
+			Shapes(_pos, _angle, _density, _restitution, _linVel, _angVel, _type, _color, _textureFile, _isAlive, _desc)
 	{
 		vertSize = _vertSize;
 		vertices = new b2Vec2[vertSize];

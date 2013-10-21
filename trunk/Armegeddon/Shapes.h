@@ -19,7 +19,7 @@ public:
 	Shapes() { }
 
 	Shapes(b2Vec2 _pos, float _angle, float _density, float _restitution, b2Vec2 _linVel, float _angVel,
-		shapeType _type, sf::Color _color, char* _textureFile, bool _isAlive)
+		shapeType _type, sf::Color _color, char* _textureFile, bool _isAlive, char* _desc)
 	{
 		bodyDef.position.Set(_pos.x, _pos.y);
 		angle = _angle;
@@ -31,6 +31,9 @@ public:
 		color = _color;
 		gravWellRad = 0.0f;
 		isAlive = _isAlive;
+		desc = _desc;
+		isDestroyed = false;
+		fixtureDef.userData = desc;
 
 		if (_textureFile != "")
 		{
@@ -138,6 +141,16 @@ public:
 		return isAlive;
 	}
 
+	char* GetDesc()
+	{
+		return desc;
+	}
+
+	bool& IsDestroyed()
+	{
+		return isDestroyed;
+	}
+
 	//Setters
 	void SetAngle(float _angle)
 	{
@@ -171,6 +184,11 @@ public:
 		gravWellRad = _gravWellRad;
 	}
 
+	void SetIsDestroyed(bool _isDestroyed)
+	{
+		isDestroyed = _isDestroyed;
+	}
+
 protected:
 	float angle, density, angVel, restitution, gravity, gravWellRad;
 	shapeType type;
@@ -179,7 +197,8 @@ protected:
 	b2FixtureDef fixtureDef;
 	sf::Color color;
 	sf::Texture texture;
-	bool isAlive, isTextured;
+	char* desc;
+	bool isAlive, isTextured, isDestroyed;
 };
 
 #endif
