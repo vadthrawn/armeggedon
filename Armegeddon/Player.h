@@ -6,9 +6,11 @@
 class Player
 {
 public:
-	static Player *Instance ()
+	~Player() { }
+
+	static Player &Instance()
 	{
-		static Player *player = new Player();
+		static Player& player = Player();
 		return player;
 	}
 
@@ -22,13 +24,15 @@ public:
 		vertices[2] = b2Vec2(_size.x / 2, _planetRad);
 		vertices[3] = b2Vec2(_size.x / 2, _planetRad + _size.y);
 
-		playerBox = new Polygon(vertices, 4, _planetPos, 0.0f, 1.0f, 0.0f, b2Vec2(0.0f, 0.0f),
+		playerBox = Polygon(vertices, 4, _planetPos, 0.0f, 1.0f, 0.0f, b2Vec2(0.0f, 0.0f),
 			0.0f, Shapes::shapeType::kin, sf::Color::White, "Textures/gradius1.png", true, "player");
 
-		playerBox->Init(_world);
+		delete[] vertices;
+
+		playerBox.Init(_world);
 	}
 
-	Polygon* GetPlayerBox()
+	Polygon& GetPlayerBox()
 	{
 		return playerBox;
 	}
@@ -45,7 +49,7 @@ private:
 	Player& operator=(Player const&);
 
 	b2Vec2 size;
-	Polygon* playerBox;
+	Polygon playerBox;
 };
 
 #endif

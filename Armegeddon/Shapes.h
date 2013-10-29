@@ -16,10 +16,12 @@ class Shapes
 public:
 	enum shapeType {stat, dyn, kin};
 
+	virtual ~Shapes() { }
+
 	Shapes() { }
 
 	Shapes(b2Vec2 _pos, float _angle, float _density, float _restitution, b2Vec2 _linVel, float _angVel,
-		shapeType _type, sf::Color _color, char* _textureFile, bool _isAlive, char* _desc)
+		shapeType _type, sf::Color _color, char* _textureFile, int _HP, char* _desc)
 	{
 		bodyDef.position.Set(_pos.x, _pos.y);
 		angle = _angle;
@@ -30,10 +32,9 @@ public:
 		type = _type;
 		color = _color;
 		gravWellRad = 0.0f;
-		isAlive = _isAlive;
-		desc = _desc;
+		HP = _HP;
 		isDestroyed = false;
-		fixtureDef.userData = desc;
+		fixtureDef.userData = _desc;
 
 		if (_textureFile != "")
 		{
@@ -136,14 +137,9 @@ public:
 		return fixtureDef;
 	}
 
-	bool& IsAlive()
+	int& GetHP()
 	{
-		return isAlive;
-	}
-
-	char* GetDesc()
-	{
-		return desc;
+		return HP;
 	}
 
 	bool& IsDestroyed()
@@ -169,9 +165,9 @@ public:
 		body->SetTransform(_pos, 0.0f);
 	}
 
-	void SetIsAlive(bool _isAlive)
+	void SetHP(int _HP)
 	{
-		isAlive = _isAlive;
+		HP = _HP;
 	}
 
 	void SetLinearVelocity(b2Vec2 _linVel)
@@ -197,8 +193,8 @@ protected:
 	b2FixtureDef fixtureDef;
 	sf::Color color;
 	sf::Texture texture;
-	char* desc;
-	bool isAlive, isTextured, isDestroyed;
+	int HP;
+	bool isTextured, isDestroyed;
 };
 
 #endif

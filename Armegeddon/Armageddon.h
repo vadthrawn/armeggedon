@@ -19,16 +19,19 @@ class Armageddon : public b2ContactListener
 {
 public:
 	Armageddon()
-	{
+	{ 
 		//Create the player character
 		Player::Instance();
-
+		
+		//Seed the random generator.
+		srand((unsigned)time(0));
+		
 		//Set this class to listen for collisions
-		World::Instance()->SetContactListener(this);
-
+		World::Instance().SetContactListener(this);
+		
 		//Create the background;
-		background = new Background("Textures/starfield.png");
-
+		background = new Background("Textures\\starfield.png");
+		
 		//Create the sound manager in preparation to use sounds.
 		soundManager = new SoundManager();
 		soundManager->SetExplosion("Sounds/explosion-01.wav");
@@ -42,43 +45,45 @@ public:
 		debrisTime = currentTimer.getElapsedTime();
 		
 		//Create the planet, initialize its values to the world, and set its gravity well radius based on the window size
-		planet = new Circle(2.0f, b2Vec2((Window::Instance()->getSize().x * SCALE) / 2.0f, (Window::Instance()->getSize().y * SCALE) / 2.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f),
-			0.0f, Shapes::shapeType::stat, sf::Color::White, "Textures/planet.png", true, "planet");
-		planet->Init(World::Instance());
-		planet->SetGravWellRadius(sqrt(pow(planet->GetPosition().x - ((Window::Instance()->getSize().x * SCALE) + 1.0f), 2) +
-			pow(planet->GetPosition().y - ((Window::Instance()->getSize().y * SCALE) + 1.0f), 2)));
+		planet = Circle(2.0f, b2Vec2((Window::Instance().getSize().x * SCALE) / 2.0f, (Window::Instance().getSize().y * SCALE) / 2.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f),
+			0.0f, Shapes::shapeType::stat, sf::Color::White, "Textures/planet.png", 1, "planet");
+
+		planet.Init(&World::Instance());
+
+		planet.SetGravWellRadius(sqrt(pow(planet.GetPosition().x - ((Window::Instance().getSize().x * SCALE) + 1.0f), 2) +
+			pow(planet.GetPosition().y - ((Window::Instance().getSize().y * SCALE) + 1.0f), 2)));
 
 		//Initialize the player object in relation to the planet and world.
-		Player::Instance()->Init(b2Vec2(1.5f, 1.5f), planet->GetRadius(), planet->GetPosition(), World::Instance());
+		Player::Instance().Init(b2Vec2(1.5f, 1.5f), planet.GetRadius(), planet.GetPosition(), &World::Instance());
 
 		//Create 8 bullets and place them in a vector list then initialize the objects.
 		for (int i = 0; i < 8; i++)
-			bulletList.push_back(new Circle(0.10f, b2Vec2(Window::Instance()->getSize().x + 0.40f * i, Window::Instance()->getSize().y + 10.0f),
-				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::kin, sf::Color::White, "", false, "bullet"));
+			bulletList.push_back(new Circle(0.10f, b2Vec2(Window::Instance().getSize().x + 0.40f * i, Window::Instance().getSize().y + 10.0f),
+				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::kin, sf::Color::White, "", 0, "bullet"));
 
 		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
-			(*iter)->Init(World::Instance());
+			(*iter)->Init(&World::Instance());
 
 		//Create the space debris and place them in a vector list then initialize the objects.
 		for (int i = 0; i < 15; i++)
-			debrisList.push_back(new Circle(1.0f, b2Vec2(Window::Instance()->getSize().x + 4.0f * i, Window::Instance()->getSize().y + 20.0f),
-				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, "", false, "debris"));
+			debrisList.push_back(new Circle(1.0f, b2Vec2(Window::Instance().getSize().x + 4.0f * i, Window::Instance().getSize().y + 20.0f),
+				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, "", 0, "debris"));
 
 		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
-			(*iter)->Init(World::Instance());
+			(*iter)->Init(&World::Instance());
 
-		while (Window::Instance()->isOpen())
+		while (Window::Instance().isOpen())
 		{
 			sf::Event event;
 
-			while (Window::Instance()->pollEvent(event))
+			while (Window::Instance().pollEvent(event))
 			{
 				if (event.type == sf::Event::Closed)
-					Window::Instance()->close();
+					Window::Instance().close();
 			}
 
-			World::Instance()->Step((1.0f/240.0f), 8, 3);
-			Window::Instance()->clear(sf::Color::Black);
+			World::Instance().Step((1.0f/240.0f), 8, 3);
+			Window::Instance().clear(sf::Color::Black);
 			
 			//Remove any destroyed bullets and debris
 			RemoveDestroyedItems();
@@ -95,12 +100,28 @@ public:
 			//Check if any bullets are outside the boundries of the game window.  Is so, we recollect the bullet for later use.
 			BulletRangeCheck();
 
-			Window::Instance()->display();
+			Window::Instance().display();
 		}
 	}
 
+	~Armageddon()
+	{
+		delete background;
+		delete soundManager;
+
+		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+			delete (*iter);
+
+		bulletList.clear();
+
+		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
+			delete (*iter);
+
+		debrisList.clear();
+	}
+
 private:
-    Circle* planet;
+    Circle planet;
     std::vector<Shapes*> bulletList, debrisList;
 	sf::Clock currentTimer;
 	sf::Time bulletPause, bulletTime, debrisPause, debrisTime;
@@ -111,7 +132,7 @@ private:
 	//A function the handle the controls for the game.
     void HandleControls()
     {
-		b2Vec2 getMousePosition = b2Vec2((sf::Mouse::getPosition(*Window::Instance()).x - (Window::Instance()->getSize().x / 2.0f)) * SCALE, (-(sf::Mouse::getPosition(*Window::Instance()).y - (Window::Instance()->getSize().y / 2.0f))) * SCALE); 
+		b2Vec2 getMousePosition = b2Vec2((sf::Mouse::getPosition(Window::Instance()).x - (Window::Instance().getSize().x / 2.0f)) * SCALE, (-(sf::Mouse::getPosition(Window::Instance()).y - (Window::Instance().getSize().y / 2.0f))) * SCALE); 
 		b2Vec2 bulletDirection = getMousePosition;
 
 		float shotAngle = 0.0f;
@@ -128,23 +149,23 @@ private:
 			shotAngle = -shotAngle;
 
 		if (shotAngle < -70.0f)
-			Player::Instance()->GetPlayerBox()->SetTextureMultiplier(0);
+			Player::Instance().GetPlayerBox().SetTextureMultiplier(0);
 		else if (shotAngle < -50.0f)
-			Player::Instance()->GetPlayerBox()->SetTextureMultiplier(1);
+			Player::Instance().GetPlayerBox().SetTextureMultiplier(1);
 		else if (shotAngle < -30.0f)
-			Player::Instance()->GetPlayerBox()->SetTextureMultiplier(2);
+			Player::Instance().GetPlayerBox().SetTextureMultiplier(2);
 		else if (shotAngle < -10.0f)
-			Player::Instance()->GetPlayerBox()->SetTextureMultiplier(3);
+			Player::Instance().GetPlayerBox().SetTextureMultiplier(3);
 		else if (shotAngle < 10.0f)
-			Player::Instance()->GetPlayerBox()->SetTextureMultiplier(4);
+			Player::Instance().GetPlayerBox().SetTextureMultiplier(4);
 		else if (shotAngle < 30.0f)
-			Player::Instance()->GetPlayerBox()->SetTextureMultiplier(5);
+			Player::Instance().GetPlayerBox().SetTextureMultiplier(5);
 		else if (shotAngle < 50.0f)
-			Player::Instance()->GetPlayerBox()->SetTextureMultiplier(6);
+			Player::Instance().GetPlayerBox().SetTextureMultiplier(6);
 		else if (shotAngle < 70.0f)
-			Player::Instance()->GetPlayerBox()->SetTextureMultiplier(7);
+			Player::Instance().GetPlayerBox().SetTextureMultiplier(7);
 		else
-			Player::Instance()->GetPlayerBox()->SetTextureMultiplier(8);
+			Player::Instance().GetPlayerBox().SetTextureMultiplier(8);
 
       if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
@@ -156,12 +177,12 @@ private:
 					//Go through the bullet list and see if you can find any bullets that are not being used (isAlive)
 					for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
 					{
-						if (!(*iter)->IsAlive())
+						if (!((*iter)->GetHP() > 0))
 						{
 							//A bullet has been found.  Set it as alive along with its new position and linear velocity.
-							(*iter)->SetIsAlive(true);
+							(*iter)->SetHP(1);
 							(*iter)->SetLinearVelocity(bulletDirection);
-							(*iter)->SetPosition(b2Vec2((Window::Instance()->getSize().x / 2) * SCALE + GetPlayerX(), (Window::Instance()->getSize().y / 2) * SCALE + GetPlayerY()));
+							(*iter)->SetPosition(b2Vec2((Window::Instance().getSize().x / 2) * SCALE + GetPlayerX(), (Window::Instance().getSize().y / 2) * SCALE + GetPlayerY()));
 
 							//Get the current time that the bullet was fired.
 							bulletTime = currentTimer.getElapsedTime();
@@ -173,12 +194,12 @@ private:
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		{ 
-			Player::Instance()->GetPlayerBox()->SetAngle(-0.1f);
+			Player::Instance().GetPlayerBox().SetAngle(-0.1f);
 		}
 		
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
-			Player::Instance()->GetPlayerBox()->SetAngle(0.1f);
+			Player::Instance().GetPlayerBox().SetAngle(0.1f);
 		}
 	}
 
@@ -186,36 +207,36 @@ private:
 	void Draw()
 	{
 		//Draw the background first.
-		background->Draw(Window::Instance());
+		background->Draw(&Window::Instance());
 
 		//Check which debris items are alive.  If they are alive, have gravity to the planet affect it and draw the debris.
 		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); ++iter)
 		{
-			if ((*iter)->IsAlive())
+			if ((*iter)->GetHP() > 0)
 			{
-				(*iter)->Attracted_To(planet);
-				(*iter)->Draw(Window::Instance());
+				(*iter)->Attracted_To(&planet);
+				(*iter)->Draw(&Window::Instance());
 			}
 		}
 
 		//Check which bullets are alive.  If they are alive, draw them.
 		for(std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
 		{
-			if ((*iter)->IsAlive())
-				(*iter)->Draw(Window::Instance());
+			if ((*iter)->GetHP() > 0)
+				(*iter)->Draw(&Window::Instance());
 		}
 
 		//Draw the player and planet last.
-		Player::Instance()->GetPlayerBox()->Draw(Window::Instance());
-		planet->Draw(Window::Instance());
+		Player::Instance().GetPlayerBox().Draw(&Window::Instance());
+		planet.Draw(&Window::Instance());
 	}
 
 	//A function to recollect bullets after they have either collided with an object of left the window space.
 	void CollectBullet(Shapes* bullet, int listPlace)
 	{
-		bullet->SetIsAlive(false);
+		bullet->SetHP(0);
 		bullet->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-		bullet->SetPosition(b2Vec2(Window::Instance()->getSize().x + 0.40f * listPlace, Window::Instance()->getSize().y + 10.0f));
+		bullet->SetPosition(b2Vec2(Window::Instance().getSize().x + 0.40f * listPlace, Window::Instance().getSize().y + 10.0f));
 	}
 
 	//A function to check if the bullets have left the play field.
@@ -225,10 +246,10 @@ private:
 
 		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
 		{
-			if ((*iter)->IsAlive())
+			if ((*iter)->GetHP() > 0)
 			{
-				if ((*iter)->GetPosition().x < -1.0f || (*iter)->GetPosition().x > Window::Instance()->getSize().x * SCALE + 1.0f ||
-					(*iter)->GetPosition().y < -1.0f || (*iter)->GetPosition().y > Window::Instance()->getSize().y * SCALE + 1.0f)
+				if ((*iter)->GetPosition().x < -1.0f || (*iter)->GetPosition().x > Window::Instance().getSize().x * SCALE + 1.0f ||
+					(*iter)->GetPosition().y < -1.0f || (*iter)->GetPosition().y > Window::Instance().getSize().y * SCALE + 1.0f)
 						CollectBullet(*iter, i);
 			}
 
@@ -243,16 +264,16 @@ private:
 		{
 			for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
 			{
-				if (!(*iter)->IsAlive())
+				if (!((*iter)->GetHP() > 0))
 				{
 					int random = rand() % 360;
-					b2Vec2 debrisPoint = GetPointAroundGravityWell(planet->GetGravWellRadius(), planet->GetPosition(), random);
+					b2Vec2 debrisPoint = GetPointAroundGravityWell(planet.GetGravWellRadius(), planet.GetPosition(), random);
 					(*iter)->SetPosition(debrisPoint);
 
-					b2Vec2 debrisVec = b2Vec2((-(debrisPoint.x - planet->GetPosition().x) / planet->GetGravWellRadius() / 4.0f), (-(debrisPoint.y - planet->GetPosition().y)) / planet->GetGravWellRadius() / 4.0f);
+					b2Vec2 debrisVec = b2Vec2((-(debrisPoint.x - planet.GetPosition().x) / planet.GetGravWellRadius() / 4.0f), (-(debrisPoint.y - planet.GetPosition().y)) / planet.GetGravWellRadius() / 4.0f);
 					(*iter)->SetLinearVelocity(debrisVec);
 
-					(*iter)->SetIsAlive(true);
+					(*iter)->SetHP(2);
 					break;
 				}
 			}
@@ -270,9 +291,9 @@ private:
 		{
 			if ((*iter)->IsDestroyed())
 			{
-				(*iter)->SetIsAlive(false);
+				(*iter)->SetHP(0);
 				(*iter)->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-				(*iter)->SetPosition(b2Vec2(Window::Instance()->getSize().x + 4.0f * i, Window::Instance()->getSize().y + 20.0f));
+				(*iter)->SetPosition(b2Vec2(Window::Instance().getSize().x + 4.0f * i, Window::Instance().getSize().y + 20.0f));
 				(*iter)->SetIsDestroyed(false);
 				soundManager->PlayExplosion();
 				break;
@@ -287,9 +308,9 @@ private:
 		{
 			if ((*iter)->IsDestroyed())
 			{
-				(*iter)->SetIsDestroyed(true);
+				(*iter)->SetHP(0);
 				(*iter)->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
-				(*iter)->SetPosition(b2Vec2(Window::Instance()->getSize().x + 0.40f * i, Window::Instance()->getSize().y + 10.0f));
+				(*iter)->SetPosition(b2Vec2(Window::Instance().getSize().x + 0.40f * i, Window::Instance().getSize().y + 10.0f));
 				(*iter)->SetIsDestroyed(false);
 				break;
 			}
@@ -301,17 +322,17 @@ private:
 	//Getters
 	float GetDistanceFromPlanetToPlayer()
 	{
-		return (planet->GetRadius() + Player::Instance()->GetSize().y / 2.0f);
+		return (planet.GetRadius() + Player::Instance().GetSize().y / 2.0f);
 	}
 
 	float GetPlayerX()
 	{
-		return (GetDistanceFromPlanetToPlayer() * sin(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD));
+		return (GetDistanceFromPlanetToPlayer() * sin(Player::Instance().GetPlayerBox().GetAngle() * DEGTORAD));
 	}
 
 	float GetPlayerY()
 	{
-		return (GetDistanceFromPlanetToPlayer() * cos(Player::Instance()->GetPlayerBox()->GetAngle() * DEGTORAD));
+		return (GetDistanceFromPlanetToPlayer() * cos(Player::Instance().GetPlayerBox().GetAngle() * DEGTORAD));
 	}
 
 	float GetPlayerToClickRadius(const float clickX, const float clickY)
@@ -321,7 +342,7 @@ private:
 
 	float GetPlayerAngle()
 	{
-		return (Player::Instance()->GetPlayerBox()->GetAngle());
+		return (Player::Instance().GetPlayerBox().GetAngle());
 	}
 
 	b2Vec2 GetPlayerVector(const float &clickX, const float &clickY)
@@ -362,7 +383,11 @@ private:
 			{
 				if ((*iter)->GetBody() == contact->GetFixtureA()->GetBody())
 				{
-					(*iter)->SetIsDestroyed(true);
+					(*iter)->SetHP((*iter)->GetHP() - 1);
+
+					if (!((*iter)->GetHP() > 0))
+						(*iter)->SetIsDestroyed(true);
+
 					break;
 				}
 			}
@@ -374,7 +399,11 @@ private:
 			{
 				if ((*iter)->GetBody() == contact->GetFixtureA()->GetBody())
 				{
-					(*iter)->SetIsDestroyed(true);
+					(*iter)->SetHP((*iter)->GetHP() - 1);
+
+					if (!((*iter)->GetHP() > 0) || fixtureB == "planet" || fixtureB == "player")
+						(*iter)->SetIsDestroyed(true);
+
 					break;
 				}
 			}
@@ -386,7 +415,11 @@ private:
 			{
 				if ((*iter)->GetBody() == contact->GetFixtureB()->GetBody())
 				{
-					(*iter)->SetIsDestroyed(true);
+					(*iter)->SetHP((*iter)->GetHP() - 1);
+
+					if (!((*iter)->GetHP() > 0))
+						(*iter)->SetIsDestroyed(true);
+
 					break;
 				}
 			}
@@ -398,7 +431,11 @@ private:
 			{
 				if ((*iter)->GetBody() == contact->GetFixtureB()->GetBody())
 				{
-					(*iter)->SetIsDestroyed(true);
+					(*iter)->SetHP((*iter)->GetHP() - 1);
+
+					if (!((*iter)->GetHP() > 0) || fixtureA == "planet" || fixtureA == "player")
+						(*iter)->SetIsDestroyed(true);
+
 					break;
 				}
 			}
