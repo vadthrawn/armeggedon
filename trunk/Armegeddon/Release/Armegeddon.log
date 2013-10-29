@@ -1,0 +1,517 @@
+﻿Box2D.lib(b2Body.obj) : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:ICF' specification
+Box2D.lib(b2CollideCircle.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2CollideEdge.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2CollidePolygon.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2ContactSolver.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2Collision.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2Distance.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2PulleyJoint.obj) : error LNK2019: unresolved external symbol __fltused referenced in function "protected: virtual void __thiscall b2PulleyJoint::InitVelocityConstraints(struct b2SolverData const &)" (?InitVelocityConstraints@b2PulleyJoint@@MAEXABUb2SolverData@@@Z)
+Box2D.lib(b2DynamicTree.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2Timer.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2Fixture.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2Math.obj) : error LNK2001: unresolved external symbol __fltused
+main.obj : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2Body.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol __fltused
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol __fltused
+main.obj : error LNK2019: unresolved external symbol __CIacos referenced in function _acosf
+main.obj : error LNK2019: unresolved external symbol __CIcos referenced in function _cosf
+main.obj : error LNK2019: unresolved external symbol __CIsin referenced in function _sinf
+main.obj : error LNK2019: unresolved external symbol __CIsqrt referenced in function _sqrtf
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2EdgeShape.obj) : error LNK2019: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@) referenced in function "public: virtual bool __thiscall b2EdgeShape::RayCast(struct b2RayCastOutput *,struct b2RayCastInput const &,struct b2Transform const &,int)const " (?RayCast@b2EdgeShape@@UBE_NPAUb2RayCastOutput@@ABUb2RayCastInput@@ABUb2Transform@@H@Z)
+Box2D.lib(b2EdgeAndCircleContact.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2PolygonContact.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2PolygonAndCircleContact.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2CircleContact.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2EdgeAndPolygonContact.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2Joint.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2Draw.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+main.obj : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
+Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2PolygonContact.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2PolygonAndCircleContact.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2CircleContact.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2EdgeAndPolygonContact.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2EdgeAndCircleContact.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2MouseJoint.obj) : error LNK2019: unresolved external symbol __purecall referenced in function "public: void __thiscall b2MouseJoint::SetTarget(struct b2Vec2 const &)" (?SetTarget@b2MouseJoint@@QAEXABUb2Vec2@@@Z)
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2Draw.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol __purecall
+main.obj : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2Joint.obj) : error LNK2001: unresolved external symbol __purecall
+Box2D.lib(b2CircleContact.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2EdgeAndPolygonContact.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2EdgeAndCircleContact.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2PolygonContact.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2PolygonAndCircleContact.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2WheelJoint.obj) : error LNK2019: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z) referenced in function "protected: virtual void __thiscall b2WheelJoint::InitVelocityConstraints(struct b2SolverData const &)" (?InitVelocityConstraints@b2WheelJoint@@MAEXABUb2SolverData@@@Z)
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2Draw.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2Joint.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+main.obj : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol "void __cdecl operator delete(void *)" (??3@YAXPAX@Z)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: __thiscall std::exception::exception(char const * const &)" (__imp_??0exception@std@@QAE@ABQBD@Z) referenced in function "public: __thiscall std::bad_alloc::bad_alloc(char const *)" (??0bad_alloc@std@@QAE@PBD@Z)
+main.obj : error LNK2001: unresolved external symbol "public: virtual char const * __thiscall std::exception::what(void)const " (?what@exception@std@@UBEPBDXZ)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: virtual __thiscall std::exception::~exception(void)" (__imp_??1exception@std@@UAE@XZ) referenced in function "public: virtual __thiscall std::bad_alloc::~bad_alloc(void)" (??1bad_alloc@std@@UAE@XZ)
+Box2D.lib(b2BroadPhase.obj) : error LNK2001: unresolved external symbol _memcpy
+Box2D.lib(b2DynamicTree.obj) : error LNK2001: unresolved external symbol _memcpy
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol _memcpy
+main.obj : error LNK2019: unresolved external symbol _memcpy referenced in function "public: static char * __cdecl std::char_traits<char>::copy(char *,char const *,unsigned int)" (?copy@?$char_traits@D@std@@SAPADPADPBDI@Z)
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol _memcpy
+Box2D.lib(b2BlockAllocator.obj) : error LNK2001: unresolved external symbol _memcpy
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol _memcpy
+main.obj : error LNK2019: unresolved external symbol __imp__memmove referenced in function "public: static char * __cdecl std::char_traits<char>::move(char *,char const *,unsigned int)" (?move@?$char_traits@D@std@@SAPADPADPBDI@Z)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) void __cdecl std::_Debug_message(wchar_t const *,wchar_t const *,unsigned int)" (__imp_?_Debug_message@std@@YAXPB_W0I@Z) referenced in function "public: void __thiscall std::_Iterator_base12::_Orphan_me(void)" (?_Orphan_me@_Iterator_base12@std@@QAEXXZ)
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol "__declspec(dllimport) void __cdecl std::_Debug_message(wchar_t const *,wchar_t const *,unsigned int)" (__imp_?_Debug_message@std@@YAXPB_W0I@Z)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: void __thiscall std::locale::facet::_Incref(void)" (__imp_?_Incref@facet@locale@std@@QAEXXZ) referenced in function "public: __thiscall std::locale::locale(void)" (??0locale@std@@QAE@XZ)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) private: static class std::locale::_Locimp * __cdecl std::locale::_Getgloballocale(void)" (__imp_?_Getgloballocale@locale@std@@CAPAV_Locimp@12@XZ) referenced in function "public: __thiscall std::locale::locale(void)" (??0locale@std@@QAE@XZ)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) private: static class std::locale::_Locimp * __cdecl std::locale::_Init(void)" (__imp_?_Init@locale@std@@CAPAV_Locimp@12@XZ) referenced in function "public: __thiscall std::locale::locale(void)" (??0locale@std@@QAE@XZ)
+main.obj : error LNK2019: unresolved external symbol __imp___time64 referenced in function _time
+Box2D.lib(b2CollidePolygon.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2Collision.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2CollideEdge.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2EdgeAndCircleContact.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2PolygonContact.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2PolygonAndCircleContact.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2CircleContact.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2ContactSolver.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2EdgeAndPolygonContact.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2Distance.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2DynamicTree.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2Joint.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2Fixture.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2BroadPhase.obj) : error LNK2001: unresolved external symbol ___security_cookie
+main.obj : error LNK2019: unresolved external symbol ___security_cookie referenced in function "public: virtual __thiscall Circle::~Circle(void)" (??1Circle@@UAE@XZ)
+Box2D.lib(b2Body.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol ___security_cookie
+Box2D.lib(b2PolygonAndCircleContact.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2CircleContact.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2EdgeAndPolygonContact.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2EdgeAndCircleContact.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2PolygonContact.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2BroadPhase.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2Joint.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+main.obj : error LNK2019: unresolved external symbol ___CxxFrameHandler3 referenced in function __ehhandler$??1Circle@@UAE@XZ
+Box2D.lib(b2Body.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol ___CxxFrameHandler3
+Box2D.lib(b2CollidePolygon.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2Collision.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2CollideEdge.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2EdgeAndCircleContact.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2PolygonContact.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2PolygonAndCircleContact.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2CircleContact.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2ContactSolver.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2EdgeAndPolygonContact.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2Distance.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2DynamicTree.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2Joint.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2Fixture.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2BroadPhase.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+main.obj : error LNK2019: unresolved external symbol @__security_check_cookie@4 referenced in function __ehhandler$??1Circle@@UAE@XZ
+Box2D.lib(b2Body.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol @__security_check_cookie@4
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: __thiscall std::_Lockit::~_Lockit(void)" (__imp_??1_Lockit@std@@QAE@XZ) referenced in function "protected: void __thiscall std::vector<class Shapes *,class std::allocator<class Shapes *> >::_Orphan_range(class Shapes * *,class Shapes * *)const " (?_Orphan_range@?$vector@PAVShapes@@V?$allocator@PAVShapes@@@std@@@std@@IBEXPAPAVShapes@@0@Z)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: __thiscall std::_Lockit::_Lockit(int)" (__imp_??0_Lockit@std@@QAE@H@Z) referenced in function "protected: void __thiscall std::vector<class Shapes *,class std::allocator<class Shapes *> >::_Orphan_range(class Shapes * *,class Shapes * *)const " (?_Orphan_range@?$vector@PAVShapes@@V?$allocator@PAVShapes@@@std@@@std@@IBEXPAPAVShapes@@0@Z)
+main.obj : error LNK2019: unresolved external symbol __imp___invalid_parameter referenced in function "public: class Shapes * const & __thiscall std::_Vector_const_iterator<class std::_Vector_val<class Shapes *,class std::allocator<class Shapes *> > >::operator*(void)const " (??D?$_Vector_const_iterator@V?$_Vector_val@PAVShapes@@V?$allocator@PAVShapes@@@std@@@std@@@std@@QBEABQAVShapes@@XZ)
+main.obj : error LNK2019: unresolved external symbol __imp___CrtDbgReportW referenced in function "public: class Shapes * const & __thiscall std::_Vector_const_iterator<class std::_Vector_val<class Shapes *,class std::allocator<class Shapes *> > >::operator*(void)const " (??D?$_Vector_const_iterator@V?$_Vector_val@PAVShapes@@V?$allocator@PAVShapes@@@std@@@std@@@std@@QBEABQAVShapes@@XZ)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) void __cdecl std::_Xlength_error(char const *)" (__imp_?_Xlength_error@std@@YAXPBD@Z) referenced in function "public: void __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Xlen(void)const " (?_Xlen@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QBEXXZ)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) void __cdecl std::_Xout_of_range(char const *)" (__imp_?_Xout_of_range@std@@YAXPBD@Z) referenced in function "public: void __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Xran(void)const " (?_Xran@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QBEXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp__free referenced in function "void __cdecl std::_DebugHeapDelete<class std::locale::facet>(class std::locale::facet *)" (??$_DebugHeapDelete@Vfacet@locale@std@@@std@@YAXPAVfacet@locale@0@@Z)
+Box2D.lib(b2Settings.obj) : error LNK2001: unresolved external symbol __imp__free
+main.obj : error LNK2019: unresolved external symbol "void * __cdecl operator new(unsigned int)" (??2@YAPAXI@Z) referenced in function "int * __cdecl std::_Allocate<int>(unsigned int,int *)" (??$_Allocate@H@std@@YAPAHIPAH@Z)
+main.obj : error LNK2019: unresolved external symbol __CxxThrowException@8 referenced in function "int * __cdecl std::_Allocate<int>(unsigned int,int *)" (??$_Allocate@H@std@@YAPAHIPAH@Z)
+main.obj : error LNK2001: unresolved external symbol "public: __thiscall std::exception::exception(class std::exception const &)" (??0exception@std@@QAE@ABV01@@Z)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: __thiscall std::exception::exception(class std::exception const &)" (__imp_??0exception@std@@QAE@ABV01@@Z) referenced in function "public: __thiscall std::bad_alloc::bad_alloc(class std::bad_alloc const &)" (??0bad_alloc@std@@QAE@ABV01@@Z)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: class std::locale::facet * __thiscall std::locale::facet::_Decref(void)" (__imp_?_Decref@facet@locale@std@@QAEPAV123@XZ) referenced in function "public: __thiscall std::locale::~locale(void)" (??1locale@std@@QAE@XZ)
+main.obj : error LNK2019: unresolved external symbol _atexit referenced in function "public: static class sf::RenderWindow & __cdecl Window::Instance(void)" (?Instance@Window@@SAAAVRenderWindow@sf@@XZ)
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol _atexit
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: void __thiscall std::_Container_base12::_Orphan_all(void)" (__imp_?_Orphan_all@_Container_base12@std@@QAEXXZ) referenced in function "protected: void __thiscall std::vector<int,class std::allocator<int> >::_Tidy(void)" (?_Tidy@?$vector@HV?$allocator@H@std@@@std@@IAEXXZ)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: __thiscall std::_Container_base12::~_Container_base12(void)" (__imp_??1_Container_base12@std@@QAE@XZ) referenced in function __unwindfunclet$??0?$_String_val@DV?$allocator@D@std@@@std@@QAE@V?$allocator@D@1@@Z$0
+main.obj : error LNK2019: unresolved external symbol "void __cdecl operator delete[](void *)" (??_V@YAXPAX@Z) referenced in function "public: virtual void __thiscall Polygon::Init(class b2World *)" (?Init@Polygon@@UAEXPAVb2World@@@Z)
+main.obj : error LNK2019: unresolved external symbol __imp__rand referenced in function "private: void __thiscall Armageddon::CreateDebris(void)" (?CreateDebris@Armageddon@@AAEXXZ)
+main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: void __thiscall std::_Container_base12::_Swap_all(struct std::_Container_base12 &)" (__imp_?_Swap_all@_Container_base12@std@@QAEXAAU12@@Z) referenced in function "public: void __thiscall std::vector<int,class std::allocator<int> >::_Assign_rv(class std::vector<int,class std::allocator<int> > &&)" (?_Assign_rv@?$vector@HV?$allocator@H@std@@@std@@QAEX$$QAV12@@Z)
+main.obj : error LNK2019: unresolved external symbol "void * __cdecl operator new[](unsigned int)" (??_U@YAPAXI@Z) referenced in function "public: __thiscall Polygon::Polygon(struct b2Vec2 * const,int,struct b2Vec2,float,float,float,struct b2Vec2,float,enum Shapes::shapeType,class sf::Color,char *,int,char *)" (??0Polygon@@QAE@QAUb2Vec2@@HU1@MMM1MW4shapeType@Shapes@@VColor@sf@@PADH4@Z)
+main.obj : error LNK2019: unresolved external symbol __imp__srand referenced in function "public: __thiscall Armageddon::Armageddon(void)" (??0Armageddon@@QAE@XZ)
+LINK : error LNK2001: unresolved external symbol _mainCRTStartup
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2CollidePolygon.obj) : error LNK2019: unresolved external symbol __RTC_CheckEsp referenced in function "public: struct b2Vec2 __thiscall b2Vec2::operator-(void)const " (??Gb2Vec2@@QBE?AU0@XZ)
+Box2D.lib(b2CollideCircle.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2PolygonAndCircleContact.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2CircleContact.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2Collision.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2CollideEdge.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2EdgeAndPolygonContact.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2EdgeAndCircleContact.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2PolygonContact.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2ContactSolver.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2WorldCallbacks.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2Distance.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2Draw.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2DynamicTree.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2Timer.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2Settings.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2StackAllocator.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2BroadPhase.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2Joint.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2Fixture.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2BlockAllocator.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2Math.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2Body.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2CollidePolygon.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2CollideCircle.obj) : error LNK2019: unresolved external symbol __RTC_Shutdown referenced in function "void __cdecl b2CollidePolygonAndCircle(struct b2Manifold *,class b2PolygonShape const *,struct b2Transform const &,class b2CircleShape const *,struct b2Transform const &)" (?b2CollidePolygonAndCircle@@YAXPAUb2Manifold@@PBVb2PolygonShape@@ABUb2Transform@@PBVb2CircleShape@@2@Z)
+Box2D.lib(b2PolygonAndCircleContact.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2CircleContact.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2Collision.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2CollideEdge.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2EdgeAndPolygonContact.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2EdgeAndCircleContact.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2PolygonContact.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2ContactSolver.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2WorldCallbacks.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2Distance.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2Draw.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2DynamicTree.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2Timer.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2Settings.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2StackAllocator.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2BroadPhase.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2Joint.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2Fixture.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2BlockAllocator.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2Math.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2Body.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol __RTC_Shutdown
+Box2D.lib(b2ChainShape.obj) : error LNK2019: unresolved external symbol __RTC_InitBase referenced in function "public: virtual __thiscall b2Shape::~b2Shape(void)" (??1b2Shape@@UAE@XZ)
+Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2CollidePolygon.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2CollideCircle.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2PolygonAndCircleContact.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2CircleContact.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2Collision.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2CollideEdge.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2EdgeAndPolygonContact.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2EdgeAndCircleContact.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2PolygonContact.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2ContactSolver.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2WorldCallbacks.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2Distance.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2Draw.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2DynamicTree.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2Timer.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2Settings.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2StackAllocator.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2BroadPhase.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2Joint.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2Fixture.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2BlockAllocator.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2Math.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2Body.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol __RTC_InitBase
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2CollidePolygon.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2PolygonContact.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2PolygonAndCircleContact.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2CircleContact.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2CollideEdge.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2EdgeAndPolygonContact.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2EdgeAndCircleContact.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2ContactSolver.obj) : error LNK2019: unresolved external symbol __imp___wassert referenced in function "public: __thiscall b2ContactSolver::b2ContactSolver(struct b2ContactSolverDef *)" (??0b2ContactSolver@@QAE@PAUb2ContactSolverDef@@@Z)
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2DynamicTree.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2Distance.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2BlockAllocator.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2StackAllocator.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2Joint.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2Body.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2Fixture.obj) : error LNK2001: unresolved external symbol __imp___wassert
+Box2D.lib(b2Body.obj) : error LNK2019: unresolved external symbol "__declspec(dllimport) public: static float __cdecl std::numeric_limits<float>::infinity(void)" (__imp_?infinity@?$numeric_limits@M@std@@SAMXZ) referenced in function "bool __cdecl b2IsValid(float)" (?b2IsValid@@YA_NM@Z)
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol "__declspec(dllimport) public: static float __cdecl std::numeric_limits<float>::infinity(void)" (__imp_?infinity@?$numeric_limits@M@std@@SAMXZ)
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol "__declspec(dllimport) public: static float __cdecl std::numeric_limits<float>::infinity(void)" (__imp_?infinity@?$numeric_limits@M@std@@SAMXZ)
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol "__declspec(dllimport) public: static float __cdecl std::numeric_limits<float>::infinity(void)" (__imp_?infinity@?$numeric_limits@M@std@@SAMXZ)
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2ContactSolver.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2Body.obj) : error LNK2019: unresolved external symbol _cos referenced in function _cosf
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol _cos
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2ContactSolver.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2019: unresolved external symbol _sin referenced in function "public: void __thiscall b2Sweep::Normalize(void)" (?Normalize@b2Sweep@@QAEXXZ)
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2Body.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol _sin
+Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2CollidePolygon.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2CollideCircle.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2ChainAndPolygonContact.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2ChainAndCircleContact.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2Collision.obj) : error LNK2019: unresolved external symbol @_RTC_CheckStackVars@8 referenced in function "bool __cdecl b2TestOverlap(class b2Shape const *,int,class b2Shape const *,int,struct b2Transform const &,struct b2Transform const &)" (?b2TestOverlap@@YA_NPBVb2Shape@@H0HABUb2Transform@@1@Z)
+Box2D.lib(b2CollideEdge.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2ContactSolver.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2WheelJoint.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2GearJoint.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2DynamicTree.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2Timer.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2Distance.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2Fixture.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2ContactManager.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2Math.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2Body.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2World.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol @_RTC_CheckStackVars@8
+Box2D.lib(b2World.obj) : error LNK2019: unresolved external symbol _memset referenced in function "public: __thiscall b2World::b2World(struct b2Vec2 const &)" (??0b2World@@QAE@ABUb2Vec2@@@Z)
+Box2D.lib(b2BlockAllocator.obj) : error LNK2001: unresolved external symbol _memset
+Box2D.lib(b2DynamicTree.obj) : error LNK2001: unresolved external symbol _memset
+Box2D.lib(b2CollideCircle.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2Collision.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2CollideEdge.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2CollidePolygon.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2PrismaticJoint.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2MouseJoint.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2DistanceJoint.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2ContactSolver.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2RopeJoint.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2FrictionJoint.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2WeldJoint.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2RevoluteJoint.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2Contact.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2Distance.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2PulleyJoint.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2World.obj) : error LNK2019: unresolved external symbol _sqrt referenced in function _sqrtf
+Box2D.lib(b2CircleShape.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2PolygonShape.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2Island.obj) : error LNK2001: unresolved external symbol _sqrt
+Box2D.lib(b2Settings.obj) : error LNK2019: unresolved external symbol __imp__malloc referenced in function "void * __cdecl b2Alloc(int)" (?b2Alloc@@YAPAXH@Z)
+Box2D.lib(b2Settings.obj) : error LNK2019: unresolved external symbol __imp__vprintf referenced in function "void __cdecl b2Log(char const *,...)" (?b2Log@@YAXPBDZZ)
+Box2D.lib(b2TimeOfImpact.obj) : error LNK2019: unresolved external symbol __imp__floor referenced in function _floorf
+LINK : error LNK2001: unresolved external symbol __load_config_used
+C:\Users\Cory\Desktop\Armageddon\Release\Armegeddon.exe : fatal error LNK1120: 56 unresolved externals

@@ -30,7 +30,7 @@ public:
 		World::Instance().SetContactListener(this);
 		
 		//Create the background;
-		background = new Background("Textures\\starfield.png");
+		background = new Background("Textures/starfield.png");
 		
 		//Create the sound manager in preparation to use sounds.
 		soundManager = new SoundManager();
