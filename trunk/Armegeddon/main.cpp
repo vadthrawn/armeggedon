@@ -2,8 +2,8 @@
 
 int main()
 {
-	Armageddon* driver = new Armageddon();
-  delete driver;
+	Armageddon driver = Armageddon();
+	//delete driver;
 
-  return 0;
+	return 0;
 };

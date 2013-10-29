@@ -1,6 +1,6 @@
 ﻿  main.cpp
-c:\users\cory\desktop\armageddon\armegeddon\player.h(26): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(46): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(57): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(65): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
+c:\users\cory\desktop\armageddon\armegeddon\player.h(28): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
+c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(49): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
+c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(62): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
+c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(70): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
   Armegeddon.vcxproj -> C:\Users\Cory\Desktop\Armageddon\Debug\Armegeddon.exe
