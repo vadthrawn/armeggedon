@@ -18,8 +18,97 @@
 class Armageddon : public b2ContactListener
 {
 public:
+	//Game constructor
 	Armageddon()
 	{ 
+		//Initialize the pre game loop items.
+		Init();
+
+		while (Window::Instance().isOpen())
+		{
+			sf::Event event;
+
+			while (Window::Instance().pollEvent(event))
+			{
+				if (event.type == sf::Event::Closed)
+					Window::Instance().close();
+
+				if (event.type == sf::Event::Resized)
+					Window::Instance().setSize(sf::Vector2u(800, 600));
+			}
+
+			World::Instance().Step((1.0f/240.0f), 8, 3);
+			Window::Instance().clear(sf::Color::Black);
+			
+			//Remove any destroyed bullets and debris
+			RemoveDestroyedItems();
+
+			//Read and take care of any user inputs.
+			HandleControls();
+
+			//Spawn any debris objects that the game needs.
+			CreateDebris();
+			
+			//Draw the game elements.
+			Draw();
+
+			//Check if any bullets are outside the boundries of the game window.  Is so, we recollect the bullet for later use.
+			BulletRangeCheck();
+
+			Window::Instance().display();
+		}
+	}
+
+	//Game destructor
+	~Armageddon()
+	{
+		delete background;
+		delete soundManager;
+
+		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+			delete (*iter);
+
+		bulletList.clear();
+
+		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
+			delete (*iter);
+
+		debrisList.clear();
+
+		for (std::vector<particle*>::iterator iter = particleList.begin(); iter != particleList.end(); iter++)
+			delete (*iter);
+
+		particleList.clear();
+
+		for (std::vector<particle*>::iterator iter = planetParticles.begin(); iter != planetParticles.end(); iter++)
+			delete (*iter);
+
+		planetParticles.clear();
+	}
+
+private:
+	//Make a struct for particle effect explosions.
+	struct particle
+	{
+		b2Vec2 position;
+		sf::Time deathTime;
+		sf::Time creationTime;
+		sf::CircleShape shape;
+	};
+
+    Circle planet;
+    std::vector<Shapes*> bulletList, debrisList;
+	std::vector<particle*> particleList, planetParticles;
+	sf::Clock currentTimer;
+	sf::Time bulletPause, bulletTime, debrisPause, debrisTime;
+	sf::Texture explosionTexture;
+	b2Vec2 windowSize;
+	Background* background;
+	SoundManager* soundManager;
+
+	//A function to handle all pregame operations befoer the game loop begins
+	void Init()
+	{
 		//Create the player character
 		Player::Instance();
 		
@@ -46,7 +135,7 @@ public:
 		
 		//Create the planet, initialize its values to the world, and set its gravity well radius based on the window size
 		planet = Circle(2.0f, b2Vec2((Window::Instance().getSize().x * SCALE) / 2.0f, (Window::Instance().getSize().y * SCALE) / 2.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f),
-			0.0f, Shapes::shapeType::stat, sf::Color::White, "Textures/planet.png", 1, "planet");
+			0.0f, Shapes::shapeType::stat, sf::Color::White, "Textures/planet.png", 3, "planet");
 
 		planet.Init(&World::Instance());
 
@@ -65,69 +154,16 @@ public:
 			(*iter)->Init(&World::Instance());
 
 		//Create the space debris and place them in a vector list then initialize the objects.
-		for (int i = 0; i < 15; i++)
+		for (int i = 0; i < 1; i++)
 			debrisList.push_back(new Circle(1.0f, b2Vec2(Window::Instance().getSize().x + 4.0f * i, Window::Instance().getSize().y + 20.0f),
 				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, "", 0, "debris"));
 
 		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
 			(*iter)->Init(&World::Instance());
 
-		while (Window::Instance().isOpen())
-		{
-			sf::Event event;
-
-			while (Window::Instance().pollEvent(event))
-			{
-				if (event.type == sf::Event::Closed)
-					Window::Instance().close();
-			}
-
-			World::Instance().Step((1.0f/240.0f), 8, 3);
-			Window::Instance().clear(sf::Color::Black);
-			
-			//Remove any destroyed bullets and debris
-			RemoveDestroyedItems();
-
-			//Read and take care of any user inputs.
-			HandleControls();
-
-			//Spawn any debris objects that the game needs.
-			CreateDebris();
-			
-			//Draw the game elements.
-			Draw();
-
-			//Check if any bullets are outside the boundries of the game window.  Is so, we recollect the bullet for later use.
-			BulletRangeCheck();
-
-			Window::Instance().display();
-		}
+		//Create the explosion texture to be used in our explosion particle system.
+		explosionTexture.loadFromFile("Textures/explosion.png");
 	}
-
-	~Armageddon()
-	{
-		delete background;
-		delete soundManager;
-
-		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
-			delete (*iter);
-
-		bulletList.clear();
-
-		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
-			delete (*iter);
-
-		debrisList.clear();
-	}
-
-private:
-    Circle planet;
-    std::vector<Shapes*> bulletList, debrisList;
-	sf::Clock currentTimer;
-	sf::Time bulletPause, bulletTime, debrisPause, debrisTime;
-	b2Vec2 windowSize;
-	Background* background;
-	SoundManager* soundManager;
 
 	//A function the handle the controls for the game.
     void HandleControls()
@@ -226,9 +262,42 @@ private:
 				(*iter)->Draw(&Window::Instance());
 		}
 
-		//Draw the player and planet last.
+		//Draw the player and planet.
 		Player::Instance().GetPlayerBox().Draw(&Window::Instance());
 		planet.Draw(&Window::Instance());
+
+		//Check to see if any particles need to be destroyed.  Draw any that are not.  The explosion particles will disipate over time.
+		//After 2 seconds they will be destroyed.
+		for (std::vector<particle*>::iterator iter = particleList.begin(); iter != particleList.end(); )
+		{
+			if (currentTimer.getElapsedTime().asMilliseconds() > (*iter)->deathTime.asMilliseconds())
+			{
+				DestroyParticle(iter);
+				iter = particleList.begin();
+			}
+
+			else
+			{
+				(*iter)->shape.setFillColor(sf::Color(255, 255, 255, ((((float)(*iter)->deathTime.asMilliseconds() - (float)currentTimer.getElapsedTime().asMilliseconds()) / 2000.0f) * 255)));
+				Window::Instance().draw((*iter)->shape, sf::BlendAdd);
+				iter++;
+			}
+		}
+		
+		//Iterate through the planet particles.  They will fade over time.  When the death time is reached we will recycle the particle
+		//giving it a new death time of 3 seconds and a new position to display.
+		for (std::vector<particle*>::iterator iter = planetParticles.begin(); iter != planetParticles.end(); iter++)
+		{
+			if (currentTimer.getElapsedTime().asMilliseconds() > (*iter)->deathTime.asMilliseconds())
+			{
+				(*iter)->deathTime = currentTimer.getElapsedTime() + sf::milliseconds(3000);
+				b2Vec2 newPosition = GetPlanetParticlePosition();
+				(*iter)->shape.setPosition(newPosition.x / SCALE, newPosition.y / SCALE);
+			}
+
+			(*iter)->shape.setFillColor(sf::Color(255, 255, 255, ((((float)(*iter)->deathTime.asMilliseconds() - (float)currentTimer.getElapsedTime().asMilliseconds()) / 3000.0f) * 255)));
+			Window::Instance().draw((*iter)->shape, sf::BlendAdd);
+		}
 	}
 
 	//A function to recollect bullets after they have either collided with an object of left the window space.
@@ -372,11 +441,14 @@ private:
 		return (b2Vec2(_origin.x + _radius * sin(_angle * DEGTORAD), _origin.y + _radius * cos(_angle * DEGTORAD)));
 	}
 
+	//Box2D overload function to check which fixtures have begun to touch.  This is used for collision detection in the game.
 	void BeginContact(b2Contact* contact)
 	{
 		char* fixtureA = (char*)contact->GetFixtureA()->GetUserData();
 		char* fixtureB = (char*)contact->GetFixtureB()->GetUserData();
 
+		//We need to determine if the fixture is a bullet or debris.  As those are the only mobile items in the game it will be one of the other.
+		//First we handle if the fixture is a bullet.
 		if (fixtureA == "bullet")
 		{
 			for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
@@ -384,15 +456,24 @@ private:
 				if ((*iter)->GetBody() == contact->GetFixtureA()->GetBody())
 				{
 					(*iter)->SetHP((*iter)->GetHP() - 1);
-
+					
 					if (!((*iter)->GetHP() > 0))
+					{
 						(*iter)->SetIsDestroyed(true);
+
+						//Make 6 particles to show the bullet has exploded.
+						for (int i = 0; i < 6; i++)
+						{
+							particleList.push_back(CreateParticle(0.50f, (*iter)->GetPosition(), rand() % 360, currentTimer.getElapsedTime() + sf::milliseconds(2000)));
+						}
+					}
 
 					break;
 				}
 			}
 		}
 
+		//Handle if the fixture is debris.  We will have to check to see if it hit the player or the planet.
 		else if (fixtureA == "debris")
 		{
 			for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
@@ -401,14 +482,36 @@ private:
 				{
 					(*iter)->SetHP((*iter)->GetHP() - 1);
 
+					//If the debris hit the player, planet, or it's hit points went to to 0 or below, we destory that debris.
 					if (!((*iter)->GetHP() > 0) || fixtureB == "planet" || fixtureB == "player")
+					{
 						(*iter)->SetIsDestroyed(true);
+
+						//Make 6 particles to show the debris has exploded.
+						for (int i = 0; i < 6; i++)
+						{
+							particleList.push_back(CreateParticle(1.50f, (*iter)->GetPosition(), rand() % 360, currentTimer.getElapsedTime() + sf::milliseconds(2000)));
+						}
+
+						//Check to see if the debris hit the planet or player.  If it did we deduct 1 hit point from the planet
+						//and create explosion effects to show the planet is damaged.
+						if (fixtureB == "planet" || fixtureB == "player")
+						{
+							planet.SetHP(planet.GetHP() - 1);
+
+							for (int i = 0; i < 6; i++)
+							{
+								planetParticles.push_back(CreateParticle(((float)(planet.GetHP() - 3) / 3.0f), GetPlanetParticlePosition(), rand() % 360, currentTimer.getElapsedTime() + sf::milliseconds(3000)));
+							}
+						}
+					}
 
 					break;
 				}
 			}
 		}
 
+		//Check to see if the fixture is a bullet.  If it is we will destory it leaving explosion effects in its place.
 		if (fixtureB == "bullet")
 		{
 			for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
@@ -418,13 +521,23 @@ private:
 					(*iter)->SetHP((*iter)->GetHP() - 1);
 
 					if (!((*iter)->GetHP() > 0))
+					{
 						(*iter)->SetIsDestroyed(true);
+
+						//Make 6 particles to show the bullet has exploded.
+						for (int i = 0; i < 6; i++)
+						{
+							particleList.push_back(CreateParticle(0.50f, (*iter)->GetPosition(), rand() % 360, currentTimer.getElapsedTime() + sf::milliseconds(2000)));
+						}
+					}
 
 					break;
 				}
 			}
 		}
 
+		//Check to see if the fixture is debris.  If it is we need to check if it is destroyed by hitting the player, planet,
+		//or its hit points have reached 0.
 		else if (fixtureB == "debris")
 		{
 			for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
@@ -434,12 +547,89 @@ private:
 					(*iter)->SetHP((*iter)->GetHP() - 1);
 
 					if (!((*iter)->GetHP() > 0) || fixtureA == "planet" || fixtureA == "player")
+					{
 						(*iter)->SetIsDestroyed(true);
+
+						//Make 6 particles to show the debris has exploded.
+						for (int i = 0; i < 6; i++)
+							particleList.push_back(CreateParticle(1.50f, (*iter)->GetPosition(), rand() % 360, currentTimer.getElapsedTime() + sf::milliseconds(2000)));
+
+						//Check to see if the debris hit the player or the planet.  If so deduct 1 hit point from the planet
+						//and create explosion particles to show the planet is damaged.
+						if (fixtureA == "planet" || fixtureA == "player")
+						{
+							planet.SetHP(planet.GetHP() - 1);
+
+							for (int i = 0; i < 6; i++)
+							{
+								planetParticles.push_back(CreateParticle(((float)(planet.GetHP() - 3) / 3.0f), GetPlanetParticlePosition(), rand() % 360, currentTimer.getElapsedTime() + sf::milliseconds(3000)));
+							}
+						}
+					}
 
 					break;
 				}
 			}
 		}
+	}
+
+	//A function to create individual explosion particles when something explodes.
+	particle* CreateParticle(float _radius, b2Vec2 _position, float _rotation, sf::Time _deathTime)
+	{
+		particle* p = new particle;
+		p->creationTime = currentTimer.getElapsedTime();
+		p->deathTime = _deathTime;
+		p->position = _position;
+
+		p->shape = sf::CircleShape();
+		p->shape.setRadius(_radius / SCALE);
+		p->shape.setOrigin(_radius / SCALE, _radius / SCALE);
+		p->shape.setRotation(_rotation);
+		p->shape.setPosition(_position.x / SCALE, Window::Instance().getSize().y - (_position.y / SCALE));
+		
+		p->shape.setTexture(&explosionTexture);
+
+		return p;
+	}
+
+	//A function to destroy pointers made to individual particles.
+	void DestroyParticle(std::vector<particle*>::iterator iter)
+	{
+		if (currentTimer.getElapsedTime().asMilliseconds() > (*iter)->deathTime.asMilliseconds())
+		{
+			particle* p;
+			p = (*iter);
+			particleList.erase(iter);
+			delete p;
+		}
+	}
+
+	//A function to get a new random position within the planet area for the planet explosion particle.
+	b2Vec2 GetPlanetParticlePosition()
+	{
+		float percentWithinPlanetForX = (float)(rand() % 100) / 100.0f;
+		float percentWithinPlanetForY;
+
+		if (rand() % 2 > 0)
+			percentWithinPlanetForX = -percentWithinPlanetForX;
+
+		float particleXPosition = planet.GetRadius() * percentWithinPlanetForX;
+		float particleYPosition = sqrt(pow(planet.GetRadius(), 2) - pow(abs(particleXPosition), 2));
+
+		if (((int)(abs(particleXPosition)) > 0))
+			percentWithinPlanetForY = (float)(rand() % (int)(particleXPosition * 100)) / 100.0f;
+		else
+			percentWithinPlanetForY = (float)(rand() % 100) / 100.0f;
+
+		particleYPosition = particleYPosition * percentWithinPlanetForY;
+
+		if (rand() % 2 > 0)
+			particleYPosition = -particleYPosition;
+
+		particleXPosition = ((Window::Instance().getSize().x / 2) * SCALE) + particleXPosition;
+		particleYPosition = ((Window::Instance().getSize().y / 2) * SCALE) + particleYPosition;
+
+		return b2Vec2(particleXPosition, particleYPosition);
 	}
 };
 

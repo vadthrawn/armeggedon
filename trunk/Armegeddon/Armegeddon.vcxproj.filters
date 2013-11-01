@@ -73,5 +73,8 @@
     <None Include="..\..\..\Downloads\explosion-01.wav">
       <Filter>Source Files\Sounds</Filter>
     </None>
+    <None Include="Textures\explosion.png">
+      <Filter>Source Files\Textures</Filter>
+    </None>
   </ItemGroup>
 </Project>

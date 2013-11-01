@@ -254,7 +254,7 @@ main.obj : error LNK2019: unresolved external symbol "void __cdecl operator dele
 main.obj : error LNK2019: unresolved external symbol __imp__rand referenced in function "private: void __thiscall Armageddon::CreateDebris(void)" (?CreateDebris@Armageddon@@AAEXXZ)
 main.obj : error LNK2019: unresolved external symbol "__declspec(dllimport) public: void __thiscall std::_Container_base12::_Swap_all(struct std::_Container_base12 &)" (__imp_?_Swap_all@_Container_base12@std@@QAEXAAU12@@Z) referenced in function "public: void __thiscall std::vector<int,class std::allocator<int> >::_Assign_rv(class std::vector<int,class std::allocator<int> > &&)" (?_Assign_rv@?$vector@HV?$allocator@H@std@@@std@@QAEX$$QAV12@@Z)
 main.obj : error LNK2019: unresolved external symbol "void * __cdecl operator new[](unsigned int)" (??_U@YAPAXI@Z) referenced in function "public: __thiscall Polygon::Polygon(struct b2Vec2 * const,int,struct b2Vec2,float,float,float,struct b2Vec2,float,enum Shapes::shapeType,class sf::Color,char *,int,char *)" (??0Polygon@@QAE@QAUb2Vec2@@HU1@MMM1MW4shapeType@Shapes@@VColor@sf@@PADH4@Z)
-main.obj : error LNK2019: unresolved external symbol __imp__srand referenced in function "public: __thiscall Armageddon::Armageddon(void)" (??0Armageddon@@QAE@XZ)
+main.obj : error LNK2019: unresolved external symbol __imp__srand referenced in function "private: void __thiscall Armageddon::Init(void)" (?Init@Armageddon@@AAEXXZ)
 LINK : error LNK2001: unresolved external symbol _mainCRTStartup
 Box2D.lib(b2ChainShape.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
 Box2D.lib(b2EdgeShape.obj) : error LNK2001: unresolved external symbol __RTC_CheckEsp
