@@ -23,9 +23,9 @@ public:
 			vertices[i].Set(_vertices[i].x, _vertices[i].y);
 	}
 
-	void Init(b2World* world)
+	void Init(b2World* world, sf::Time _creationTime)
 	{
-		Shapes::Init(world);
+		Shapes::Init(world, _creationTime);
 		body = world->CreateBody(&bodyDef);
 
 		polyShape.Set(vertices, vertSize);
@@ -49,7 +49,7 @@ public:
 	void Draw(sf::RenderWindow* window)
 	{
 		shape.setPosition(body->GetPosition().x / SCALE, window->getSize().y - (body->GetPosition().y / SCALE));
-		shape.setRotation(angle);
+		shape.setRotation(body->GetAngle() * RADTODEG);
 
 		shape.setTextureRect(sf::IntRect(227 + (24 * textureMultiplier), 63, textureSize.front(), textureSize.back()));
 

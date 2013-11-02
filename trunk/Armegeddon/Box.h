@@ -20,9 +20,9 @@ public:
 		shape.setFillColor(_color);
 	}
 
-	void Init(b2World* world)
+	void Init(b2World* world, sf::Time _creationTime)
 	{
-		Shapes::Init(world);
+		Shapes::Init(world, _creationTime);
 		body = world->CreateBody(&bodyDef);
 
 		fixtureDef.shape = &polyShape;
@@ -34,7 +34,7 @@ public:
 	void Draw(sf::RenderWindow* window)
 	{
 		shape.setPosition(body->GetPosition().x / SCALE, window->getSize().y - (body->GetPosition().y / SCALE));
-		shape.setRotation(angle);
+		shape.setRotation(body->GetAngle() * RADTODEG);
 
 		window->draw(shape);
 	}

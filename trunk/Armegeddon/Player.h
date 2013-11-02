@@ -14,7 +14,7 @@ public:
 		return player;
 	}
 
-	void Init(const b2Vec2 _size, const float& _planetRad, const b2Vec2& _planetPos,  b2World* _world)
+	void Init(const b2Vec2 _size, const float& _planetRad, const b2Vec2& _planetPos,  b2World* _world, sf::Time _creationTime)
 	{
 		size = _size;
 		b2Vec2* vertices = new b2Vec2[4];
@@ -29,7 +29,7 @@ public:
 
 		delete[] vertices;
 
-		playerBox.Init(_world);
+		playerBox.Init(_world, _creationTime);
 	}
 
 	Polygon& GetPlayerBox()
