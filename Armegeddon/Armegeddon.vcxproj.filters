@@ -76,5 +76,8 @@
     <None Include="Textures\explosion.png">
       <Filter>Source Files\Textures</Filter>
     </None>
+    <None Include="Textures\asteroid.png">
+      <Filter>Source Files\Textures</Filter>
+    </None>
   </ItemGroup>
 </Project>

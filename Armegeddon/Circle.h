@@ -17,9 +17,9 @@ public:
 		circleShape.m_radius = _radius;
 	}
 
-	void Init(b2World* world)
+	void Init(b2World* world, sf::Time _creationTime)
 	{
-		Shapes::Init(world);
+		Shapes::Init(world, _creationTime);
 		body = world->CreateBody(&bodyDef);
 
 		circleShape.m_p.SetZero();
@@ -33,16 +33,23 @@ public:
 		shape.setFillColor(color);
 
 		if (isTextured)
+		{
 			shape.setTexture(&texture);
+
+			if (fixtureDef.userData == "planet")
+				textureCoordinates = sf::IntRect(0, 0, 133, 134);
+			else if (fixtureDef.userData == "debris")
+				textureCoordinates = sf::IntRect(0, 0, 128, 128);
+		}
 	}
 
 	void Draw(sf::RenderWindow* window)
 	{
 		shape.setPosition(body->GetPosition().x / SCALE, window->getSize().y - (body->GetPosition().y / SCALE));
-		shape.setRotation(angle);
+		shape.setRotation(body->GetAngle() * RADTODEG);
 
-		if (fixtureDef.userData == "planet")
-			shape.setTextureRect(sf::IntRect(0, 0, 133, 134));
+		if (isTextured)
+			shape.setTextureRect(textureCoordinates);
 
 		window->draw(shape);
 	}

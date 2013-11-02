@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Downloads\explosion-01.wav" />
+    <None Include="Textures\asteroid.png" />
     <None Include="Textures\explosion.png" />
     <None Include="Textures\gradius1.png" />
     <None Include="Textures\planet.png" />

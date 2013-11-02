@@ -33,7 +33,9 @@ public:
 		color = _color;
 		gravWellRad = 0.0f;
 		HP = _HP;
+		rotationPhase = 0;
 		isDestroyed = false;
+		isAlive = false;
 		fixtureDef.userData = _desc;
 
 		if (_textureFile != "")
@@ -46,7 +48,7 @@ public:
 			isTextured = false;
 	}
 
-	virtual void Init(b2World* world)
+	virtual void Init(b2World* world, sf::Time _creationTime)
 	{
 		switch(type)
 		{
@@ -67,6 +69,8 @@ public:
 
 		fixtureDef.density = density;
 		fixtureDef.restitution = restitution;
+
+		SetCreationTime(_creationTime);
 	}
 
 	virtual void Draw(sf::RenderWindow* window){}
@@ -102,7 +106,7 @@ public:
 		return body;
 	}
 
-	sf::Color GetColor()
+	sf::Color& GetColor()
 	{
 		return color;
 	}
@@ -122,7 +126,7 @@ public:
 		return body->GetPosition();
 	}
 
-	float GetAngle()
+	float& GetAngle()
 	{
 		return angle;
 	}
@@ -142,9 +146,24 @@ public:
 		return HP;
 	}
 
+	int& GetRotationPhase()
+	{
+		return rotationPhase;
+	}
+
+	sf::Time& GetCreationTime()
+	{
+		return creationTime;
+	}
+
 	bool& IsDestroyed()
 	{
 		return isDestroyed;
+	}
+
+	bool& IsAlive()
+	{
+		return isAlive;
 	}
 
 	//Setters
@@ -185,16 +204,38 @@ public:
 		isDestroyed = _isDestroyed;
 	}
 
+	void SetIsAlive(bool _isAlive)
+	{
+		isAlive = _isAlive;
+	}
+
+	void SetTextureCoordinates(const int _row, const int _column, const int _width, const int _height)
+	{
+		textureCoordinates = sf::IntRect(_row * _width, _column * _height, _width, _height);
+	}
+
+	void SetRotationPhase(int _rotationPhase)
+	{
+		rotationPhase = _rotationPhase;
+	}
+
+	void SetCreationTime(sf::Time _creationTime)
+	{
+		creationTime = _creationTime;
+	}
+
 protected:
 	float angle, density, angVel, restitution, gravity, gravWellRad;
 	shapeType type;
 	b2BodyDef bodyDef;
 	b2Body* body;
 	b2FixtureDef fixtureDef;
+	sf::IntRect textureCoordinates;
 	sf::Color color;
 	sf::Texture texture;
-	int HP;
-	bool isTextured, isDestroyed;
+	sf::Time creationTime;
+	int HP, rotationPhase;
+	bool isTextured, isDestroyed, isAlive;
 };
 
 #endif

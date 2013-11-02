@@ -100,7 +100,7 @@ private:
     std::vector<Shapes*> bulletList, debrisList;
 	std::vector<particle*> particleList, planetParticles;
 	sf::Clock currentTimer;
-	sf::Time bulletPause, bulletTime, debrisPause, debrisTime;
+	sf::Time bulletPause, bulletTime, debrisPause, debrisTime, debrisRotationPause;
 	sf::Texture explosionTexture;
 	b2Vec2 windowSize;
 	Background* background;
@@ -132,18 +132,21 @@ private:
 		//Set the debris timer and pause between spawning debris
 		debrisPause = sf::milliseconds(2000);
 		debrisTime = currentTimer.getElapsedTime();
+
+		//Set the debris rotation pause to signify when the debris should be turned using the sprite sheet.
+		debrisRotationPause = sf::milliseconds(100);
 		
 		//Create the planet, initialize its values to the world, and set its gravity well radius based on the window size
 		planet = Circle(2.0f, b2Vec2((Window::Instance().getSize().x * SCALE) / 2.0f, (Window::Instance().getSize().y * SCALE) / 2.0f), 0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f),
 			0.0f, Shapes::shapeType::stat, sf::Color::White, "Textures/planet.png", 3, "planet");
 
-		planet.Init(&World::Instance());
+		planet.Init(&World::Instance(), currentTimer.getElapsedTime());
 
 		planet.SetGravWellRadius(sqrt(pow(planet.GetPosition().x - ((Window::Instance().getSize().x * SCALE) + 1.0f), 2) +
 			pow(planet.GetPosition().y - ((Window::Instance().getSize().y * SCALE) + 1.0f), 2)));
 
 		//Initialize the player object in relation to the planet and world.
-		Player::Instance().Init(b2Vec2(1.5f, 1.5f), planet.GetRadius(), planet.GetPosition(), &World::Instance());
+		Player::Instance().Init(b2Vec2(1.5f, 1.5f), planet.GetRadius(), planet.GetPosition(), &World::Instance(), currentTimer.getElapsedTime());
 
 		//Create 8 bullets and place them in a vector list then initialize the objects.
 		for (int i = 0; i < 8; i++)
@@ -151,15 +154,15 @@ private:
 				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::kin, sf::Color::White, "", 0, "bullet"));
 
 		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
-			(*iter)->Init(&World::Instance());
+			(*iter)->Init(&World::Instance(), currentTimer.getElapsedTime());
 
 		//Create the space debris and place them in a vector list then initialize the objects.
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 15; i++)
 			debrisList.push_back(new Circle(1.0f, b2Vec2(Window::Instance().getSize().x + 4.0f * i, Window::Instance().getSize().y + 20.0f),
-				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::Yellow, "", 0, "debris"));
+				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::White, "Textures/asteroid.png", 0, "debris"));
 
 		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
-			(*iter)->Init(&World::Instance());
+			(*iter)->Init(&World::Instance(), currentTimer.getElapsedTime());
 
 		//Create the explosion texture to be used in our explosion particle system.
 		explosionTexture.loadFromFile("Textures/explosion.png");
@@ -252,6 +255,18 @@ private:
 			{
 				(*iter)->Attracted_To(&planet);
 				(*iter)->Draw(&Window::Instance());
+
+				//Check if it is time to rotate the debris.
+				if (currentTimer.getElapsedTime().asMilliseconds() - (*iter)->GetCreationTime().asMilliseconds() > debrisRotationPause.asMilliseconds())
+				{
+					(*iter)->SetRotationPhase((*iter)->GetRotationPhase() + 1);
+
+					if ((*iter)->GetRotationPhase() > 59)
+						(*iter)->SetRotationPhase(0);
+
+					RotateDebris((*iter), (*iter)->GetRotationPhase());
+					(*iter)->SetCreationTime(currentTimer.getElapsedTime());
+				}
 			}
 		}
 
@@ -343,6 +358,12 @@ private:
 					(*iter)->SetLinearVelocity(debrisVec);
 
 					(*iter)->SetHP(2);
+					(*iter)->SetCreationTime(currentTimer.getElapsedTime());
+					(*iter)->SetRotationPhase(rand() % 59);
+					
+					RotateDebris((*iter), (*iter)->GetRotationPhase());
+
+					(*iter)->SetIsAlive(true);
 					break;
 				}
 			}
@@ -351,20 +372,34 @@ private:
 		}
 	}
 
-	//A function to remove any destroyed bullets and debris
+	//A function to handle rotating the debris using the asteroid sprite sheet.
+	void RotateDebris(Shapes* shape, const int _rotationPhase)
+	{
+		int row = _rotationPhase % 8;
+		int column = _rotationPhase / 8;
+
+		shape->SetTextureCoordinates(row, column, 128, 128);
+	}
+
+	//A function to remove any destroyed bullets and debris.  Debris that has been knocked out of the
+	//influence of the gravity well will be collected here as well.
 	void RemoveDestroyedItems()
 	{
 		int i = 0;
 
 		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
 		{
-			if ((*iter)->IsDestroyed())
+			if ((*iter)->IsDestroyed() || ((sqrt(pow(planet.GetPosition().x - (*iter)->GetPosition().x, 2) + pow(planet.GetPosition().y - (*iter)->GetPosition().y, 2))) > planet.GetGravWellRadius() && (*iter)->IsAlive()))
 			{
 				(*iter)->SetHP(0);
 				(*iter)->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 				(*iter)->SetPosition(b2Vec2(Window::Instance().getSize().x + 4.0f * i, Window::Instance().getSize().y + 20.0f));
+
+				if ((*iter)->IsDestroyed())
+					soundManager->PlayExplosion();
+
+				(*iter)->SetIsAlive(false);
 				(*iter)->SetIsDestroyed(false);
-				soundManager->PlayExplosion();
 				break;
 			}
 
