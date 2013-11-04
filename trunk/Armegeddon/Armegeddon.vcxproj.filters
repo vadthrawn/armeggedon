@@ -22,6 +22,9 @@
     <Filter Include="Source Files\Sounds">
       <UniqueIdentifier>{aaea980e-ae8e-49e1-bdef-6e4b09f92d46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Fonts">
+      <UniqueIdentifier>{be4b3cf3-254b-45d0-a2da-5f3cf88cdeb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -59,6 +62,9 @@
     <ClInclude Include="SoundManager.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="MusicManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Textures\planet.png">
@@ -78,6 +84,15 @@
     </None>
     <None Include="Textures\asteroid.png">
       <Filter>Source Files\Textures</Filter>
+    </None>
+    <None Include="Fonts\arial.ttf">
+      <Filter>Source Files\Fonts</Filter>
+    </None>
+    <None Include="Sounds\HeavensDevils.wav">
+      <Filter>Source Files\Sounds</Filter>
+    </None>
+    <None Include="Sounds\LaserShot.wav">
+      <Filter>Source Files\Sounds</Filter>
     </None>
   </ItemGroup>
 </Project>

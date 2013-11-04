@@ -37,11 +37,11 @@ public:
 		return playerBox;
 	}
 
-  b2Vec2& GetSize()
+	b2Vec2& GetSize()
 
-  {
-    return size;
-  }
+	{
+		return size;
+	}
 
 private:
 	Player() {};

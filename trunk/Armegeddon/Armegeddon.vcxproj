@@ -95,6 +95,7 @@
     <ClInclude Include="Background.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="MusicManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="Shapes.h" />
@@ -104,6 +105,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Downloads\explosion-01.wav" />
+    <None Include="Fonts\arial.ttf" />
+    <None Include="Sounds\HeavensDevils.wav" />
+    <None Include="Sounds\LaserShot.wav" />
     <None Include="Textures\asteroid.png" />
     <None Include="Textures\explosion.png" />
     <None Include="Textures\gradius1.png" />
