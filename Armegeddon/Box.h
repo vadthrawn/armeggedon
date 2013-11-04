@@ -34,7 +34,7 @@ public:
 	void Draw(sf::RenderWindow* window)
 	{
 		shape.setPosition(body->GetPosition().x / SCALE, window->getSize().y - (body->GetPosition().y / SCALE));
-		shape.setRotation(body->GetAngle() * RADTODEG);
+		shape.setRotation(-(body->GetAngle() * RADTODEG));
 
 		window->draw(shape);
 	}

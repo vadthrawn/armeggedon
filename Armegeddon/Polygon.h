@@ -49,7 +49,7 @@ public:
 	void Draw(sf::RenderWindow* window)
 	{
 		shape.setPosition(body->GetPosition().x / SCALE, window->getSize().y - (body->GetPosition().y / SCALE));
-		shape.setRotation(body->GetAngle() * RADTODEG);
+		shape.setRotation(-(body->GetAngle() * RADTODEG));
 
 		shape.setTextureRect(sf::IntRect(227 + (24 * textureMultiplier), 63, textureSize.front(), textureSize.back()));
 

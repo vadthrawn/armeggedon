@@ -9,7 +9,9 @@
 #include <World.h>
 #include <Background.h>
 #include <SoundManager.h>
+#include <MusicManager.h>
 
+#include <sstream>
 #include <list>
 
 #define _USE_MATH_DEFINES
@@ -37,23 +39,99 @@ public:
 					Window::Instance().setSize(sf::Vector2u(800, 600));
 			}
 
-			World::Instance().Step((1.0f/240.0f), 8, 3);
-			Window::Instance().clear(sf::Color::Black);
+			switch (gameState)
+			{
+			case gameStart:
+				{
+					SetupGame();
+
+					break;
+				}
+
+			case gameReady:
+				{
+					background->Draw(&Window::Instance());
+
+					sf::Text mainTitle;
+					mainTitle.setFont(font);
+					mainTitle.setString("Armageddon");
+					mainTitle.setScale(2.0f, 2.0f);
+					mainTitle.setPosition(240, 200);
+					mainTitle.setColor(sf::Color::Red);
+
+					sf::Text command1;
+					command1.setFont(font);
+					command1.setString("Press Spacebar To Start");
+					command1.setPosition(250, 400);
+
+					Window::Instance().draw(mainTitle);
+					Window::Instance().draw(command1);
+
+					HandleControls();
+
+					break;
+				}
+
+			case gamePlaying:
+				{
+					World::Instance().Step((1.0f/240.0f), 8, 3);
+					Window::Instance().clear(sf::Color::Black);
 			
-			//Remove any destroyed bullets and debris
-			RemoveDestroyedItems();
+					//Remove any destroyed bullets and debris
+					RemoveDestroyedItems();
 
-			//Read and take care of any user inputs.
-			HandleControls();
+					//Read and take care of any user inputs.
+					HandleControls();
 
-			//Spawn any debris objects that the game needs.
-			CreateDebris();
+					//Spawn any debris objects that the game needs.
+					CreateDebris();
 			
-			//Draw the game elements.
-			Draw();
+					//Draw the game elements.
+					Draw();
 
-			//Check if any bullets are outside the boundries of the game window.  Is so, we recollect the bullet for later use.
-			BulletRangeCheck();
+					//Update and display the current score.
+					std::ostringstream ss;
+					ss << "Score: " << score;
+
+					scoreText.setString(ss.str());
+					Window::Instance().draw(scoreText);
+
+					//Check if any bullets are outside the boundries of the game window.  Is so, we recollect the bullet for later use.
+					BulletRangeCheck();
+
+					break;
+				}
+
+			case gameOver:
+				{
+					//Window::Instance().clear(sf::Color::Black);
+
+					sf::Text gameOverText;
+					gameOverText.setFont(font);
+					gameOverText.setString("Game Over");
+					gameOverText.setPosition(325, 150);
+
+					sf::Text startAgainText;
+					startAgainText.setFont(font);
+					startAgainText.setString("Press Spacebar to Play Again");
+					startAgainText.setPosition(200, 450);
+
+					Draw();
+
+					std::ostringstream ss;
+					ss << "Score: " << score;
+
+					scoreText.setString(ss.str());
+					Window::Instance().draw(scoreText);
+
+					Window::Instance().draw(gameOverText);
+					Window::Instance().draw(startAgainText);
+
+					HandleControls();
+
+					break;
+				}
+			}
 
 			Window::Instance().display();
 		}
@@ -63,7 +141,9 @@ public:
 	~Armageddon()
 	{
 		delete background;
-		delete soundManager;
+		delete explosionManager;
+		delete laserShotManager;
+		delete musicManager;
 
 		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
 			delete (*iter);
@@ -96,21 +176,36 @@ private:
 		sf::CircleShape shape;
 	};
 
+	enum GameState {gameStart, gameReady, gamePlaying, gameOver};
+
     Circle planet;
     std::vector<Shapes*> bulletList, debrisList;
 	std::vector<particle*> particleList, planetParticles;
 	sf::Clock currentTimer;
 	sf::Time bulletPause, bulletTime, debrisPause, debrisTime, debrisRotationPause;
 	sf::Texture explosionTexture;
+	sf::Font font;
+	sf::Text scoreText;
+	GameState gameState;
 	b2Vec2 windowSize;
 	Background* background;
-	SoundManager* soundManager;
+	SoundManager* explosionManager, *laserShotManager;
+	MusicManager* musicManager;
+	int score;
 
 	//A function to handle all pregame operations befoer the game loop begins
 	void Init()
 	{
 		//Create the player character
 		Player::Instance();
+
+		//Set the font for the game to use and set the text object.
+		font.loadFromFile("Fonts/arial.ttf");
+
+		//Set the font, position, and scale for the score text.
+		scoreText.setFont(font);
+		scoreText.setScale(0.5f, 0.5f);
+		scoreText.setPosition(0, 0);
 		
 		//Seed the random generator.
 		srand((unsigned)time(0));
@@ -122,8 +217,13 @@ private:
 		background = new Background("Textures/starfield.png");
 		
 		//Create the sound manager in preparation to use sounds.
-		soundManager = new SoundManager();
-		soundManager->SetExplosion("Sounds/explosion-01.wav");
+		musicManager = new MusicManager();
+		explosionManager = new SoundManager();
+		laserShotManager = new SoundManager();
+
+		explosionManager->SetSound("Sounds/explosion-01.wav");
+		laserShotManager->SetSound("Sounds/LaserShot.wav");
+		musicManager->SetMusic("Sounds/HeavensDevils.wav");
 		
 		//Set the bullet timer and pause between bullet shots
 		bulletPause = sf::milliseconds(250);
@@ -166,79 +266,147 @@ private:
 
 		//Create the explosion texture to be used in our explosion particle system.
 		explosionTexture.loadFromFile("Textures/explosion.png");
+
+		//Set the game to game start.
+		gameState = gameStart;
+	}
+
+	//A function to set the game into its initial start positions.
+	void SetupGame()
+	{
+		Player::Instance().GetPlayerBox().SetAngle(0.0f);
+
+		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
+			(*iter)->SetIsDestroyed(true);
+
+		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+			(*iter)->SetIsDestroyed(true);
+
+		RemoveDestroyedItems();
+
+		for (std::vector<particle*>::iterator iter = planetParticles.begin(); iter != planetParticles.end(); )
+		{
+			DestroyParticle(iter, &planetParticles);
+			iter = planetParticles.begin();
+		}
+
+		for (std::vector<particle*>::iterator iter = particleList.begin(); iter != particleList.end(); )
+		{
+			DestroyParticle(iter, &particleList);
+			iter = particleList.begin();
+		}
+
+		planet.SetHP(3);
+		score = 0;
+
+		gameState = gameReady;
 	}
 
 	//A function the handle the controls for the game.
     void HandleControls()
     {
-		b2Vec2 getMousePosition = b2Vec2((sf::Mouse::getPosition(Window::Instance()).x - (Window::Instance().getSize().x / 2.0f)) * SCALE, (-(sf::Mouse::getPosition(Window::Instance()).y - (Window::Instance().getSize().y / 2.0f))) * SCALE); 
-		b2Vec2 bulletDirection = getMousePosition;
-
-		float shotAngle = 0.0f;
-
-		if (GetPlayerToClickRadius(getMousePosition.x, getMousePosition.y) != 0)
-			shotAngle = acos((pow(GetPlayerToClickRadius(getMousePosition.x, getMousePosition.y), 2)
-				+ pow(GetPlayerToClickRadius(getMousePosition.x, getMousePosition.y), 2)
-				- pow(GetDistanceFromVectorToClick(getMousePosition.x, getMousePosition.y), 2))
-				/ (2 * pow(GetPlayerToClickRadius(getMousePosition.x, getMousePosition.y), 2))) * RADTODEG;
-
-		RotatePosition(GetPlayerX(), GetPlayerY(), (360.0f - GetPlayerAngle()) * DEGTORAD, getMousePosition);
-
-		if (getMousePosition.x < 0)
-			shotAngle = -shotAngle;
-
-		if (shotAngle < -70.0f)
-			Player::Instance().GetPlayerBox().SetTextureMultiplier(0);
-		else if (shotAngle < -50.0f)
-			Player::Instance().GetPlayerBox().SetTextureMultiplier(1);
-		else if (shotAngle < -30.0f)
-			Player::Instance().GetPlayerBox().SetTextureMultiplier(2);
-		else if (shotAngle < -10.0f)
-			Player::Instance().GetPlayerBox().SetTextureMultiplier(3);
-		else if (shotAngle < 10.0f)
-			Player::Instance().GetPlayerBox().SetTextureMultiplier(4);
-		else if (shotAngle < 30.0f)
-			Player::Instance().GetPlayerBox().SetTextureMultiplier(5);
-		else if (shotAngle < 50.0f)
-			Player::Instance().GetPlayerBox().SetTextureMultiplier(6);
-		else if (shotAngle < 70.0f)
-			Player::Instance().GetPlayerBox().SetTextureMultiplier(7);
-		else
-			Player::Instance().GetPlayerBox().SetTextureMultiplier(8);
-
-      if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (gameState == gameReady)
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 			{
-				//Check to see if the player has recently fired a shot and if the shot is within the 220 degree arc over the player object.
-				if (bulletTime.asMilliseconds() + bulletPause.asMilliseconds() < sf::Time(currentTimer.getElapsedTime()).asMilliseconds() && shotAngle >= -110.0f && shotAngle <= 110.0f)
+				gameState = gamePlaying;
+				musicManager->StartMusic();
+			}
+		}
+
+		else if (gameState == gameOver)
+		{
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+			{
+				SetupGame();
+				gameState = gamePlaying;
+			}
+		}
+
+		else if (gameState == gamePlaying)
+		{
+			b2Vec2 getMousePosition = b2Vec2((sf::Mouse::getPosition(Window::Instance()).x - (Window::Instance().getSize().x / 2.0f)) * SCALE, (-(sf::Mouse::getPosition(Window::Instance()).y - (Window::Instance().getSize().y / 2.0f))) * SCALE); 
+			b2Vec2 bulletDirection = getMousePosition;
+
+			float shotAngle = 0.0f;
+
+			//Check to see if the mouse is directly on the player object.  If not calculate the angle from the
+			//pointer to the planet using the Y-axis as 0 degrees.
+			if (GetPlayerToClickRadius(getMousePosition.x, getMousePosition.y) != 0)
+				shotAngle = acos((pow(GetPlayerToClickRadius(getMousePosition.x, getMousePosition.y), 2)
+					+ pow(GetPlayerToClickRadius(getMousePosition.x, getMousePosition.y), 2)
+					- pow(GetDistanceFromVectorToClick(getMousePosition.x, getMousePosition.y), 2))
+					/ (2 * pow(GetPlayerToClickRadius(getMousePosition.x, getMousePosition.y), 2))) * RADTODEG;
+
+			RotatePosition(GetPlayerX(), GetPlayerY(), (360.0f - GetPlayerAngle()) * DEGTORAD, getMousePosition);
+
+			//Chck if the mouse pointer is to the left or right of the player object in regards
+			//to the vector from the planet origin to the player origin.  Adjust the angle accordingly.
+			if (getMousePosition.x < 0)
+				shotAngle = -shotAngle;
+
+			//Determine what texture to display based on the angle of the mouse pointer in relation to
+			//the vector from planet origin to player origin.
+			if (shotAngle < -70.0f)
+				Player::Instance().GetPlayerBox().SetTextureMultiplier(0);
+			else if (shotAngle < -50.0f)
+				Player::Instance().GetPlayerBox().SetTextureMultiplier(1);
+			else if (shotAngle < -30.0f)
+				Player::Instance().GetPlayerBox().SetTextureMultiplier(2);
+			else if (shotAngle < -10.0f)
+				Player::Instance().GetPlayerBox().SetTextureMultiplier(3);
+			else if (shotAngle < 10.0f)
+				Player::Instance().GetPlayerBox().SetTextureMultiplier(4);
+			else if (shotAngle < 30.0f)
+				Player::Instance().GetPlayerBox().SetTextureMultiplier(5);
+			else if (shotAngle < 50.0f)
+				Player::Instance().GetPlayerBox().SetTextureMultiplier(6);
+			else if (shotAngle < 70.0f)
+				Player::Instance().GetPlayerBox().SetTextureMultiplier(7);
+			else
+				Player::Instance().GetPlayerBox().SetTextureMultiplier(8);
+
+			//Handle if the player presses the fire button.
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					bulletDirection = b2Vec2((bulletDirection.x - GetPlayerX()) / GetPlayerToClickRadius(bulletDirection.x, bulletDirection.y), (bulletDirection.y - GetPlayerY())/ GetPlayerToClickRadius(bulletDirection.x, bulletDirection.y));
-
-					//Go through the bullet list and see if you can find any bullets that are not being used (isAlive)
-					for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+					//Check to see if the player has recently fired a shot and if the shot is within the 220 degree arc over the player object.
+					if (bulletTime.asMilliseconds() + bulletPause.asMilliseconds() < sf::Time(currentTimer.getElapsedTime()).asMilliseconds() && shotAngle >= -110.0f && shotAngle <= 110.0f)
 					{
-						if (!((*iter)->GetHP() > 0))
-						{
-							//A bullet has been found.  Set it as alive along with its new position and linear velocity.
-							(*iter)->SetHP(1);
-							(*iter)->SetLinearVelocity(bulletDirection);
-							(*iter)->SetPosition(b2Vec2((Window::Instance().getSize().x / 2) * SCALE + GetPlayerX(), (Window::Instance().getSize().y / 2) * SCALE + GetPlayerY()));
+						bulletDirection = b2Vec2((bulletDirection.x - GetPlayerX()) / GetPlayerToClickRadius(bulletDirection.x, bulletDirection.y), (bulletDirection.y - GetPlayerY())/ GetPlayerToClickRadius(bulletDirection.x, bulletDirection.y));
 
-							//Get the current time that the bullet was fired.
-							bulletTime = currentTimer.getElapsedTime();
-							break;
+						//Go through the bullet list and see if you can find any bullets that are not being used (HP == 0)
+						for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
+						{
+							if (!((*iter)->GetHP() > 0))
+							{
+								//A bullet has been found.  Set it as alive along with its new position and linear velocity.
+								(*iter)->SetHP(1);
+								(*iter)->SetLinearVelocity(bulletDirection);
+								(*iter)->SetPosition(b2Vec2((Window::Instance().getSize().x / 2) * SCALE + GetPlayerX(), (Window::Instance().getSize().y / 2) * SCALE + GetPlayerY()));
+
+								//Get the current time that the bullet was fired.
+								bulletTime = currentTimer.getElapsedTime();
+
+								//Play the laser shot sound.
+								laserShotManager->PlaySound();
+
+								break;
+							}
 						}
 					}
 				}
-			}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-		{ 
-			Player::Instance().GetPlayerBox().SetAngle(-0.1f);
-		}
+			//Handle if the player presses the left arrow.  Rotate the player object to the left.
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+			{ 
+				Player::Instance().GetPlayerBox().SetAngle(-0.1f);
+			}
 		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-		{
-			Player::Instance().GetPlayerBox().SetAngle(0.1f);
+			//Handle if the player presses the right arrow.  Rotate the player object to the right.
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+			{
+				Player::Instance().GetPlayerBox().SetAngle(0.1f);
+			}
 		}
 	}
 
@@ -287,7 +455,7 @@ private:
 		{
 			if (currentTimer.getElapsedTime().asMilliseconds() > (*iter)->deathTime.asMilliseconds())
 			{
-				DestroyParticle(iter);
+				DestroyParticle(iter, &particleList);
 				iter = particleList.begin();
 			}
 
@@ -395,12 +563,11 @@ private:
 				(*iter)->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 				(*iter)->SetPosition(b2Vec2(Window::Instance().getSize().x + 4.0f * i, Window::Instance().getSize().y + 20.0f));
 
-				if ((*iter)->IsDestroyed())
-					soundManager->PlayExplosion();
-
+				if ((*iter)->IsDestroyed() && (gameState == gamePlaying))
+					explosionManager->PlaySound();
+				
 				(*iter)->SetIsAlive(false);
 				(*iter)->SetIsDestroyed(false);
-				break;
 			}
 
 			i++;
@@ -416,7 +583,6 @@ private:
 				(*iter)->SetLinearVelocity(b2Vec2(0.0f, 0.0f));
 				(*iter)->SetPosition(b2Vec2(Window::Instance().getSize().x + 0.40f * i, Window::Instance().getSize().y + 10.0f));
 				(*iter)->SetIsDestroyed(false);
-				break;
 			}
 
 			i++;
@@ -521,6 +687,7 @@ private:
 					if (!((*iter)->GetHP() > 0) || fixtureB == "planet" || fixtureB == "player")
 					{
 						(*iter)->SetIsDestroyed(true);
+						score++;
 
 						//Make 6 particles to show the debris has exploded.
 						for (int i = 0; i < 6; i++)
@@ -537,6 +704,13 @@ private:
 							for (int i = 0; i < 6; i++)
 							{
 								planetParticles.push_back(CreateParticle(((float)(planet.GetHP() - 3) / 3.0f), GetPlanetParticlePosition(), rand() % 360, currentTimer.getElapsedTime() + sf::milliseconds(3000)));
+							}
+
+							//Check to see if the game is over.
+							if (planet.GetHP() < 0)
+							{
+								gameState = gameOver;
+								explosionManager->PlaySound();
 							}
 						}
 					}
@@ -584,6 +758,7 @@ private:
 					if (!((*iter)->GetHP() > 0) || fixtureA == "planet" || fixtureA == "player")
 					{
 						(*iter)->SetIsDestroyed(true);
+						score++;
 
 						//Make 6 particles to show the debris has exploded.
 						for (int i = 0; i < 6; i++)
@@ -598,6 +773,13 @@ private:
 							for (int i = 0; i < 6; i++)
 							{
 								planetParticles.push_back(CreateParticle(((float)(planet.GetHP() - 3) / 3.0f), GetPlanetParticlePosition(), rand() % 360, currentTimer.getElapsedTime() + sf::milliseconds(3000)));
+							}
+
+							//Check to see if the game is over.
+							if (planet.GetHP() < 0)
+							{
+								gameState = gameOver;
+								explosionManager->PlaySound();
 							}
 						}
 					}
@@ -628,15 +810,12 @@ private:
 	}
 
 	//A function to destroy pointers made to individual particles.
-	void DestroyParticle(std::vector<particle*>::iterator iter)
+	void DestroyParticle(std::vector<particle*>::iterator &_iter, std::vector<particle*> *_list)
 	{
-		if (currentTimer.getElapsedTime().asMilliseconds() > (*iter)->deathTime.asMilliseconds())
-		{
-			particle* p;
-			p = (*iter);
-			particleList.erase(iter);
-			delete p;
-		}
+		particle* p;
+		p = (*_iter);
+		_list->erase(_iter);
+		delete p;
 	}
 
 	//A function to get a new random position within the planet area for the planet explosion particle.

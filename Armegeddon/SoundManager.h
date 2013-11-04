@@ -11,11 +11,11 @@ public:
 		
 	}
 
-	void SetExplosion(char* _fileName)
+	void SetSound(char* _fileName)
 	{
 		buffer.loadFromFile(_fileName);
-		explosion.setBuffer(buffer);
-		explosion.setVolume(75.0f);
+		sound.setBuffer(buffer);
+		sound.setVolume(75.0f);
 	}
 
 	void SetMusic(char* _fileName)
@@ -25,9 +25,9 @@ public:
 		music.setVolume(50.0f);
 	}
 
-	void PlayExplosion()
+	void PlaySound()
 	{
-		explosion.play();
+		sound.play();
 	}
 
 	void StartMusic()
@@ -41,7 +41,7 @@ public:
 	}
 
 private:
-	sf::Sound explosion;
+	sf::Sound sound;
 	sf::SoundBuffer buffer;
 	sf::Music music;
 };

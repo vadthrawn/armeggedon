@@ -1,14 +1,1 @@
-﻿  main.cpp
-c:\users\cory\desktop\armageddon\armegeddon\player.h(28): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(141): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(154): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(162): warning C4482: nonstandard extension used: enum 'Shapes::shapeType' used in qualified name
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(296): warning C4244: 'argument' : conversion from 'float' to 'sf::Uint8', possible loss of data
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(313): warning C4244: 'argument' : conversion from 'float' to 'sf::Uint8', possible loss of data
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(502): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(528): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(539): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(565): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(590): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-c:\users\cory\desktop\armageddon\armegeddon\armageddon.h(600): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
-  Armegeddon.vcxproj -> C:\Users\Cory\Desktop\Armageddon\Debug\Armegeddon.exe
+﻿
