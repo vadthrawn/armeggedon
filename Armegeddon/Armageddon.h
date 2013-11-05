@@ -89,12 +89,25 @@ public:
 					//Draw the game elements.
 					Draw();
 
-					//Update and display the current score.
-					std::ostringstream ss;
-					ss << "Score: " << score;
+					//Update and display the current score and high score.
+					char scoreNumber[5];
+					char scoreLabel[20];
+					strcpy(scoreLabel, "Score: ");
+					itoa(score, scoreNumber, 10);
+					strcat(scoreLabel, scoreNumber);
 
-					scoreText.setString(ss.str());
+					scoreText.setString(scoreLabel);
 					Window::Instance().draw(scoreText);
+
+					if (score > highScore)
+						highScore = score;
+
+					strcpy(scoreLabel, "High Score: ");
+					itoa(highScore, scoreNumber, 10);
+					strcat(scoreLabel, scoreNumber);
+
+					highScoreText.setString(scoreLabel);
+					Window::Instance().draw(highScoreText);
 
 					//Check if any bullets are outside the boundries of the game window.  Is so, we recollect the bullet for later use.
 					BulletRangeCheck();
@@ -104,8 +117,6 @@ public:
 
 			case gameOver:
 				{
-					//Window::Instance().clear(sf::Color::Black);
-
 					sf::Text gameOverText;
 					gameOverText.setFont(font);
 					gameOverText.setString("Game Over");
@@ -118,11 +129,24 @@ public:
 
 					Draw();
 
-					std::ostringstream ss;
-					ss << "Score: " << score;
+					char scoreNumber[5];
+					char scoreLabel[20];
+					strcpy(scoreLabel, "Score: ");
+					itoa(score, scoreNumber, 10);
+					strcat(scoreLabel, scoreNumber);
 
-					scoreText.setString(ss.str());
+					scoreText.setString(scoreLabel);
 					Window::Instance().draw(scoreText);
+
+					if (score > highScore)
+						highScore = score;
+
+					strcpy(scoreLabel, "High Score: ");
+					itoa(highScore, scoreNumber, 10);
+					strcat(scoreLabel, scoreNumber);
+
+					highScoreText.setString(scoreLabel);
+					Window::Instance().draw(highScoreText);
 
 					Window::Instance().draw(gameOverText);
 					Window::Instance().draw(startAgainText);
@@ -140,6 +164,12 @@ public:
 	//Game destructor
 	~Armageddon()
 	{
+		FILE* highScoreFile = fopen("Data/HighScore.txt", "w");
+		char highScoreChar[5];
+		strcpy(highScoreChar, itoa(highScore, highScoreChar, 10));
+
+		fputs(highScoreChar, highScoreFile);
+
 		delete background;
 		delete explosionManager;
 		delete laserShotManager;
@@ -185,13 +215,13 @@ private:
 	sf::Time bulletPause, bulletTime, debrisPause, debrisTime, debrisRotationPause;
 	sf::Texture explosionTexture;
 	sf::Font font;
-	sf::Text scoreText;
+	sf::Text scoreText, highScoreText;
 	GameState gameState;
 	b2Vec2 windowSize;
 	Background* background;
 	SoundManager* explosionManager, *laserShotManager;
 	MusicManager* musicManager;
-	int score;
+	int score, highScore;
 
 	//A function to handle all pregame operations befoer the game loop begins
 	void Init()
@@ -206,6 +236,10 @@ private:
 		scoreText.setFont(font);
 		scoreText.setScale(0.5f, 0.5f);
 		scoreText.setPosition(0, 0);
+
+		highScoreText.setFont(font);
+		highScoreText.setScale(0.5f, 0.5f);
+		highScoreText.setPosition(700, 0);
 		
 		//Seed the random generator.
 		srand((unsigned)time(0));
@@ -298,6 +332,12 @@ private:
 
 		planet.SetHP(3);
 		score = 0;
+
+		FILE* highScoreFile = fopen("Data/HighScore.txt", "r");
+		char* highScoreChar = new char;
+
+		fgets(highScoreChar, 100, highScoreFile);
+		highScore = atoi(highScoreChar);
 
 		gameState = gameReady;
 	}
