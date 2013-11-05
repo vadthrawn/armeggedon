@@ -25,6 +25,9 @@
     <Filter Include="Source Files\Fonts">
       <UniqueIdentifier>{be4b3cf3-254b-45d0-a2da-5f3cf88cdeb2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Data">
+      <UniqueIdentifier>{01e8f5e6-008e-4a3e-bc0e-57cff96c2ad2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -93,6 +96,9 @@
     </None>
     <None Include="Sounds\LaserShot.wav">
       <Filter>Source Files\Sounds</Filter>
+    </None>
+    <None Include="Data\HighScore.txt">
+      <Filter>Source Files\Data</Filter>
     </None>
   </ItemGroup>
 </Project>
