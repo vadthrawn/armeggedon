@@ -184,15 +184,7 @@ public:
 			delete (*iter);
 
 		debrisList.clear();
-
-		for (std::vector<particle*>::iterator iter = particleList.begin(); iter != particleList.end(); iter++)
-			delete (*iter);
-
 		particleList.clear();
-
-		for (std::vector<particle*>::iterator iter = planetParticles.begin(); iter != planetParticles.end(); iter++)
-			delete (*iter);
-
 		planetParticles.clear();
 	}
 
@@ -204,13 +196,14 @@ private:
 		sf::Time deathTime;
 		sf::Time creationTime;
 		sf::CircleShape shape;
+		bool isAlive;
 	};
 
 	enum GameState {gameStart, gameReady, gamePlaying, gameOver};
 
     Circle planet;
     std::vector<Shapes*> bulletList, debrisList;
-	std::vector<particle*> particleList, planetParticles;
+	std::vector<particle> particleList, planetParticles;
 	sf::Clock currentTimer;
 	sf::Time bulletPause, bulletTime, debrisPause, debrisTime, debrisRotationPause;
 	sf::Texture explosionTexture;
@@ -239,7 +232,7 @@ private:
 
 		highScoreText.setFont(font);
 		highScoreText.setScale(0.5f, 0.5f);
-		highScoreText.setPosition(700, 0);
+		highScoreText.setPosition(650, 0);
 		
 		//Seed the random generator.
 		srand((unsigned)time(0));
@@ -318,15 +311,15 @@ private:
 
 		RemoveDestroyedItems();
 
-		for (std::vector<particle*>::iterator iter = planetParticles.begin(); iter != planetParticles.end(); )
+		for (std::vector<particle>::iterator iter = planetParticles.begin(); iter != planetParticles.end(); )
 		{
-			DestroyParticle(iter, &planetParticles);
+			planetParticles.erase(iter);
 			iter = planetParticles.begin();
 		}
 
-		for (std::vector<particle*>::iterator iter = particleList.begin(); iter != particleList.end(); )
+		for (std::vector<particle>::iterator iter = particleList.begin(); iter != particleList.end(); )
 		{
-			DestroyParticle(iter, &particleList);
+			particleList.erase(iter);
 			iter = particleList.begin();
 		}
 
@@ -335,9 +328,13 @@ private:
 
 		FILE* highScoreFile = fopen("Data/HighScore.txt", "r");
 		char* highScoreChar = new char;
+		int highScoreTemp;
 
 		fgets(highScoreChar, 100, highScoreFile);
-		highScore = atoi(highScoreChar);
+		highScoreTemp = atoi(highScoreChar);
+
+		if (highScoreTemp > highScore)
+			highScore = highScoreTemp;
 
 		gameState = gameReady;
 	}
@@ -491,35 +488,35 @@ private:
 
 		//Check to see if any particles need to be destroyed.  Draw any that are not.  The explosion particles will disipate over time.
 		//After 2 seconds they will be destroyed.
-		for (std::vector<particle*>::iterator iter = particleList.begin(); iter != particleList.end(); )
+		for (std::vector<particle>::iterator iter = particleList.begin(); iter != particleList.end(); )
 		{
-			if (currentTimer.getElapsedTime().asMilliseconds() > (*iter)->deathTime.asMilliseconds())
+			if (currentTimer.getElapsedTime().asMilliseconds() > iter->deathTime.asMilliseconds())
 			{
-				DestroyParticle(iter, &particleList);
+				particleList.erase(iter);
 				iter = particleList.begin();
 			}
 
 			else
 			{
-				(*iter)->shape.setFillColor(sf::Color(255, 255, 255, ((((float)(*iter)->deathTime.asMilliseconds() - (float)currentTimer.getElapsedTime().asMilliseconds()) / 2000.0f) * 255)));
-				Window::Instance().draw((*iter)->shape, sf::BlendAdd);
+				iter->shape.setFillColor(sf::Color(255, 255, 255, ((((float)iter->deathTime.asMilliseconds() - (float)currentTimer.getElapsedTime().asMilliseconds()) / 2000.0f) * 255)));
+				Window::Instance().draw(iter->shape, sf::BlendAdd);
 				iter++;
 			}
 		}
 		
 		//Iterate through the planet particles.  They will fade over time.  When the death time is reached we will recycle the particle
 		//giving it a new death time of 3 seconds and a new position to display.
-		for (std::vector<particle*>::iterator iter = planetParticles.begin(); iter != planetParticles.end(); iter++)
+		for (std::vector<particle>::iterator iter = planetParticles.begin(); iter != planetParticles.end(); iter++)
 		{
-			if (currentTimer.getElapsedTime().asMilliseconds() > (*iter)->deathTime.asMilliseconds())
+			if (currentTimer.getElapsedTime().asMilliseconds() > iter->deathTime.asMilliseconds())
 			{
-				(*iter)->deathTime = currentTimer.getElapsedTime() + sf::milliseconds(3000);
+				iter->deathTime = currentTimer.getElapsedTime() + sf::milliseconds(3000);
 				b2Vec2 newPosition = GetPlanetParticlePosition();
-				(*iter)->shape.setPosition(newPosition.x / SCALE, newPosition.y / SCALE);
+				iter->shape.setPosition(newPosition.x / SCALE, newPosition.y / SCALE);
 			}
 
-			(*iter)->shape.setFillColor(sf::Color(255, 255, 255, ((((float)(*iter)->deathTime.asMilliseconds() - (float)currentTimer.getElapsedTime().asMilliseconds()) / 3000.0f) * 255)));
-			Window::Instance().draw((*iter)->shape, sf::BlendAdd);
+			iter->shape.setFillColor(sf::Color(255, 255, 255, ((((float)iter->deathTime.asMilliseconds() - (float)currentTimer.getElapsedTime().asMilliseconds()) / 3000.0f) * 255)));
+			Window::Instance().draw(iter->shape, sf::BlendAdd);
 		}
 	}
 
@@ -831,31 +828,28 @@ private:
 	}
 
 	//A function to create individual explosion particles when something explodes.
-	particle* CreateParticle(float _radius, b2Vec2 _position, float _rotation, sf::Time _deathTime)
+	particle CreateParticle(float _radius, b2Vec2 _position, float _rotation, sf::Time _deathTime)
 	{
-		particle* p = new particle;
-		p->creationTime = currentTimer.getElapsedTime();
-		p->deathTime = _deathTime;
-		p->position = _position;
+		particle p;
+		p.creationTime = currentTimer.getElapsedTime();
+		p.deathTime = _deathTime;
+		p.position = _position;
 
-		p->shape = sf::CircleShape();
-		p->shape.setRadius(_radius / SCALE);
-		p->shape.setOrigin(_radius / SCALE, _radius / SCALE);
-		p->shape.setRotation(_rotation);
-		p->shape.setPosition(_position.x / SCALE, Window::Instance().getSize().y - (_position.y / SCALE));
+		p.shape = sf::CircleShape();
+		p.shape.setRadius(_radius / SCALE);
+		p.shape.setOrigin(_radius / SCALE, _radius / SCALE);
+		p.shape.setRotation(_rotation);
+		p.shape.setPosition(_position.x / SCALE, Window::Instance().getSize().y - (_position.y / SCALE));
 		
-		p->shape.setTexture(&explosionTexture);
+		p.shape.setTexture(&explosionTexture);
 
 		return p;
 	}
 
-	//A function to destroy pointers made to individual particles.
-	void DestroyParticle(std::vector<particle*>::iterator &_iter, std::vector<particle*> *_list)
+	//A function to remove particles from particle lists once they have disappeared.
+	void DestroyParticle(std::vector<particle>::iterator &_iter, std::vector<particle> *_list)
 	{
-		particle* p;
-		p = (*_iter);
 		_list->erase(_iter);
-		delete p;
 	}
 
 	//A function to get a new random position within the planet area for the planet explosion particle.
