@@ -11,8 +11,8 @@
 #include <SoundManager.h>
 #include <MusicManager.h>
 
-#include <sstream>
 #include <list>
+#include <sys/stat.h>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -109,6 +109,18 @@ public:
 					highScoreText.setString(scoreLabel);
 					Window::Instance().draw(highScoreText);
 
+					if (!isLevelDisplayFinished)
+						InitializeLevel();
+
+					if (currentLevel == objectsDestroyed)
+					{
+						isLevelDisplayed = false;
+						isLevelDisplayFinished = false;
+						beginCreatingObjects = false;
+						objectsCreated = 0;
+						objectsDestroyed = 0;
+					}
+
 					//Check if any bullets are outside the boundries of the game window.  Is so, we recollect the bullet for later use.
 					BulletRangeCheck();
 
@@ -151,6 +163,12 @@ public:
 					Window::Instance().draw(gameOverText);
 					Window::Instance().draw(startAgainText);
 
+					currentLevel = 0;
+					isLevelDisplayed= false;
+					isLevelDisplayFinished = false;
+					objectsCreated = 0;
+					objectsDestroyed = 0;
+
 					HandleControls();
 
 					break;
@@ -164,7 +182,7 @@ public:
 	//Game destructor
 	~Armageddon()
 	{
-		FILE* highScoreFile = fopen("Data/HighScore.txt", "w");
+		FILE* highScoreFile = fopen("HighScore.txt", "w");
 		char highScoreChar[5];
 		strcpy(highScoreChar, itoa(highScore, highScoreChar, 10));
 
@@ -205,16 +223,17 @@ private:
     std::vector<Shapes*> bulletList, debrisList;
 	std::vector<particle> particleList, planetParticles;
 	sf::Clock currentTimer;
-	sf::Time bulletPause, bulletTime, debrisPause, debrisTime, debrisRotationPause;
+	sf::Time bulletPause, bulletTime, debrisPause, debrisTime, debrisRotationPause, levelDisplayTime;
 	sf::Texture explosionTexture;
 	sf::Font font;
-	sf::Text scoreText, highScoreText;
+	sf::Text scoreText, highScoreText, levelText;
 	GameState gameState;
 	b2Vec2 windowSize;
 	Background* background;
 	SoundManager* explosionManager, *laserShotManager;
 	MusicManager* musicManager;
-	int score, highScore;
+	int score, highScore, currentLevel, objectsDestroyed, objectsCreated;
+	bool isLevelDisplayed, isLevelDisplayFinished, beginCreatingObjects;
 
 	//A function to handle all pregame operations befoer the game loop begins
 	void Init()
@@ -225,7 +244,7 @@ private:
 		//Set the font for the game to use and set the text object.
 		font.loadFromFile("Fonts/arial.ttf");
 
-		//Set the font, position, and scale for the score text.
+		//Set the font, position, and scale for the score, high score, and level text.
 		scoreText.setFont(font);
 		scoreText.setScale(0.5f, 0.5f);
 		scoreText.setPosition(0, 0);
@@ -233,6 +252,10 @@ private:
 		highScoreText.setFont(font);
 		highScoreText.setScale(0.5f, 0.5f);
 		highScoreText.setPosition(650, 0);
+
+		levelText.setFont(font);
+		levelText.setScale(1.0f, 1.0f);
+		levelText.setPosition(345, 175);
 		
 		//Seed the random generator.
 		srand((unsigned)time(0));
@@ -278,7 +301,7 @@ private:
 		//Create 8 bullets and place them in a vector list then initialize the objects.
 		for (int i = 0; i < 8; i++)
 			bulletList.push_back(new Circle(0.10f, b2Vec2(Window::Instance().getSize().x + 0.40f * i, Window::Instance().getSize().y + 10.0f),
-				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::kin, sf::Color::White, "", 0, "bullet"));
+				0.0f, 1.0f, -0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::kin, sf::Color::White, "", 0, "bullet"));
 
 		for (std::vector<Shapes*>::iterator iter = bulletList.begin(); iter != bulletList.end(); iter++)
 			(*iter)->Init(&World::Instance(), currentTimer.getElapsedTime());
@@ -286,13 +309,23 @@ private:
 		//Create the space debris and place them in a vector list then initialize the objects.
 		for (int i = 0; i < 15; i++)
 			debrisList.push_back(new Circle(1.0f, b2Vec2(Window::Instance().getSize().x + 4.0f * i, Window::Instance().getSize().y + 20.0f),
-				0.0f, 1.0f, 0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::White, "Textures/asteroid.png", 0, "debris"));
+				0.0f, 1.0f, -0.25f, b2Vec2(0.0f, 0.0f), 0.0f, Shapes::shapeType::dyn, sf::Color::White, "Textures/asteroid.png", 0, "debris"));
 
 		for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
 			(*iter)->Init(&World::Instance(), currentTimer.getElapsedTime());
 
 		//Create the explosion texture to be used in our explosion particle system.
 		explosionTexture.loadFromFile("Textures/explosion.png");
+
+		//Initialize the objects created, destroyed, and the current level to 0 to
+		//signify the start of a new game.
+		objectsCreated = 0;
+		objectsDestroyed = 0;
+		currentLevel = 0;
+
+		isLevelDisplayed = false;
+		isLevelDisplayFinished = false;
+		beginCreatingObjects = false;
 
 		//Set the game to game start.
 		gameState = gameStart;
@@ -326,7 +359,17 @@ private:
 		planet.SetHP(3);
 		score = 0;
 
-		FILE* highScoreFile = fopen("Data/HighScore.txt", "r");
+		struct stat st;
+		int fileExists = stat("HighScore.txt", &st);
+
+		if (fileExists != 0)
+		{
+			FILE* highScoreFileTemp = fopen("HighScore.txt", "w");
+			fputs("0", highScoreFileTemp);
+			fclose(highScoreFileTemp);
+		}
+
+		FILE* highScoreFile = fopen("HighScore.txt", "r");
 		char* highScoreChar = new char;
 		int highScoreTemp;
 
@@ -549,31 +592,35 @@ private:
 	//A function to create a new debris object in the game.
 	void CreateDebris()
 	{
-		if (currentTimer.getElapsedTime().asMilliseconds() > debrisTime.asMilliseconds() + debrisPause.asMilliseconds())
+		if (currentLevel > objectsCreated && beginCreatingObjects)
 		{
-			for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
+			if (currentTimer.getElapsedTime().asMilliseconds() > debrisTime.asMilliseconds() + debrisPause.asMilliseconds())
 			{
-				if (!((*iter)->GetHP() > 0))
+				for (std::vector<Shapes*>::iterator iter = debrisList.begin(); iter != debrisList.end(); iter++)
 				{
-					int random = rand() % 360;
-					b2Vec2 debrisPoint = GetPointAroundGravityWell(planet.GetGravWellRadius(), planet.GetPosition(), random);
-					(*iter)->SetPosition(debrisPoint);
+					if (!((*iter)->GetHP() > 0))
+					{
+						int random = rand() % 360;
+						b2Vec2 debrisPoint = GetPointAroundGravityWell(planet.GetGravWellRadius(), planet.GetPosition(), random);
+						(*iter)->SetPosition(debrisPoint);
 
-					b2Vec2 debrisVec = b2Vec2((-(debrisPoint.x - planet.GetPosition().x) / planet.GetGravWellRadius() / 4.0f), (-(debrisPoint.y - planet.GetPosition().y)) / planet.GetGravWellRadius() / 4.0f);
-					(*iter)->SetLinearVelocity(debrisVec);
+						b2Vec2 debrisVec = b2Vec2((-(debrisPoint.x - planet.GetPosition().x) / planet.GetGravWellRadius() / 4.0f), (-(debrisPoint.y - planet.GetPosition().y)) / planet.GetGravWellRadius() / 4.0f);
+						(*iter)->SetLinearVelocity(debrisVec);
 
-					(*iter)->SetHP(2);
-					(*iter)->SetCreationTime(currentTimer.getElapsedTime());
-					(*iter)->SetRotationPhase(rand() % 59);
+						(*iter)->SetHP(2);
+						(*iter)->SetCreationTime(currentTimer.getElapsedTime());
+						(*iter)->SetRotationPhase(rand() % 59);
 					
-					RotateDebris((*iter), (*iter)->GetRotationPhase());
+						RotateDebris((*iter), (*iter)->GetRotationPhase());
 
-					(*iter)->SetIsAlive(true);
-					break;
+						(*iter)->SetIsAlive(true);
+						break;
+					}
 				}
-			}
 			
-			debrisTime = currentTimer.getElapsedTime();
+				debrisTime = currentTimer.getElapsedTime();
+				objectsCreated++;
+			}
 		}
 	}
 
@@ -601,7 +648,10 @@ private:
 				(*iter)->SetPosition(b2Vec2(Window::Instance().getSize().x + 4.0f * i, Window::Instance().getSize().y + 20.0f));
 
 				if ((*iter)->IsDestroyed() && (gameState == gamePlaying))
+				{
 					explosionManager->PlaySound();
+					objectsDestroyed++;
+				}
 				
 				(*iter)->SetIsAlive(false);
 				(*iter)->SetIsDestroyed(false);
@@ -724,7 +774,9 @@ private:
 					if (!((*iter)->GetHP() > 0) || fixtureB == "planet" || fixtureB == "player")
 					{
 						(*iter)->SetIsDestroyed(true);
-						score++;
+
+						if (fixtureB != "planet")
+							score++;
 
 						//Make 6 particles to show the debris has exploded.
 						for (int i = 0; i < 6; i++)
@@ -795,7 +847,9 @@ private:
 					if (!((*iter)->GetHP() > 0) || fixtureA == "planet" || fixtureA == "player")
 					{
 						(*iter)->SetIsDestroyed(true);
-						score++;
+							
+						if (fixtureA != "planet")
+							score++;
 
 						//Make 6 particles to show the debris has exploded.
 						for (int i = 0; i < 6; i++)
@@ -878,6 +932,34 @@ private:
 		particleYPosition = ((Window::Instance().getSize().y / 2) * SCALE) + particleYPosition;
 
 		return b2Vec2(particleXPosition, particleYPosition);
+	}
+
+	void InitializeLevel()
+	{
+		if (!isLevelDisplayed)
+		{
+			levelDisplayTime = currentTimer.getElapsedTime();
+			currentLevel++;
+			isLevelDisplayed = true;
+		}
+
+		if (currentTimer.getElapsedTime().asMilliseconds() < levelDisplayTime.asMilliseconds() + 2000)
+		{
+			char levelNumber[4];
+			char levelLabel[20];
+			strcpy(levelLabel, "Level ");
+			itoa(currentLevel, levelNumber, 10);
+			strcat(levelLabel, levelNumber);
+
+			levelText.setString(levelLabel);
+			Window::Instance().draw(levelText);
+		}
+
+		else
+		{
+			beginCreatingObjects = true;
+			isLevelDisplayFinished = true;
+		}
 	}
 };
 
