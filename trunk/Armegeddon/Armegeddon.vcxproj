@@ -105,7 +105,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Downloads\explosion-01.wav" />
-    <None Include="Data\HighScore.txt" />
     <None Include="Fonts\arial.ttf" />
     <None Include="Sounds\HeavensDevils.wav" />
     <None Include="Sounds\LaserShot.wav" />
