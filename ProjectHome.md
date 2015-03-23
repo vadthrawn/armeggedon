@@ -1,0 +1,1 @@
+A small game involving a planet that is protected by the player via a movable gun turret around the surface of the planet.  Space junk will descend toward the planet.  3 hits to the planet and the game is over.
